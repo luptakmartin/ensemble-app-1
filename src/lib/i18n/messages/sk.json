@@ -10,7 +10,9 @@
     "back": "Späť",
     "confirm": "Potvrdiť",
     "search": "Hľadať",
-    "noResults": "Žiadne výsledky"
+    "noResults": "Žiadne výsledky",
+    "forbidden": "Nemáte oprávnenie na vykonanie tejto akcie.",
+    "notFound": "Nenájdené."
   },
   "auth": {
     "login": "Prihlásiť sa",
@@ -19,6 +21,10 @@
     "password": "Heslo",
     "forgotPassword": "Zabudnuté heslo",
     "resetPassword": "Obnoviť heslo",
+    "resetPasswordDescription": "Zadajte svoj e-mail a my vám pošleme odkaz na obnovenie hesla.",
+    "resetPasswordSuccess": "Ak účet s touto e-mailovou adresou existuje, odoslali sme odkaz na obnovenie hesla.",
+    "sendResetLink": "Odoslať odkaz",
+    "backToLogin": "Späť na prihlásenie",
     "loginError": "Nesprávny e-mail alebo heslo"
   },
   "events": {
@@ -33,6 +39,15 @@
     "time": "Čas",
     "place": "Miesto",
     "description": "Popis",
+    "create": "Vytvoriť udalosť",
+    "edit": "Upraviť udalosť",
+    "deleteEvent": "Vymazať udalosť",
+    "confirmDelete": "Naozaj chcete vymazať túto udalosť? Túto akciu nie je možné vrátiť späť.",
+    "noUpcoming": "Žiadne nadchádzajúce udalosti.",
+    "noPast": "Žiadne minulé udalosti.",
+    "backToEvents": "Späť na udalosti",
+    "save": "Uložiť",
+    "details": "Detail udalosti",
     "types": {
       "regular_rehearsal": "Pravidelná skúška",
       "exceptional_rehearsal": "Mimoriadna skúška",

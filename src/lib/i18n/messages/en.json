@@ -10,7 +10,9 @@
     "back": "Back",
     "confirm": "Confirm",
     "search": "Search",
-    "noResults": "No results"
+    "noResults": "No results",
+    "forbidden": "You don't have permission to perform this action.",
+    "notFound": "Not found."
   },
   "auth": {
     "login": "Log in",
@@ -19,6 +21,10 @@
     "password": "Password",
     "forgotPassword": "Forgot password",
     "resetPassword": "Reset password",
+    "resetPasswordDescription": "Enter your email and we'll send you a link to reset your password.",
+    "resetPasswordSuccess": "If an account with that email exists, we've sent a password reset link.",
+    "sendResetLink": "Send reset link",
+    "backToLogin": "Back to login",
     "loginError": "Invalid email or password"
   },
   "events": {
@@ -33,6 +39,15 @@
     "time": "Time",
     "place": "Place",
     "description": "Description",
+    "create": "Create Event",
+    "edit": "Edit Event",
+    "deleteEvent": "Delete Event",
+    "confirmDelete": "Are you sure you want to delete this event? This action cannot be undone.",
+    "noUpcoming": "No upcoming events.",
+    "noPast": "No past events.",
+    "backToEvents": "Back to events",
+    "save": "Save",
+    "details": "Event Details",
     "types": {
       "regular_rehearsal": "Regular Rehearsal",
       "exceptional_rehearsal": "Exceptional Rehearsal",

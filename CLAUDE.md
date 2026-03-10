@@ -21,3 +21,6 @@ Read these documents before starting any feature work.
 - Run dev server: `npm run dev`
 - Run tests: `npm test`
 - Lint: `npm run lint`
+
+# Testing
+- Always write unit tests (Vitest) alongside implementation. Run them to validate before presenting the result.
