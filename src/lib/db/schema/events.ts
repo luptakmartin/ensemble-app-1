@@ -1,4 +1,4 @@
-import { pgTable, uuid, varchar, timestamp, text, pgEnum } from "drizzle-orm/pg-core";
+import { pgTable, uuid, varchar, timestamp, text, pgEnum, unique } from "drizzle-orm/pg-core";
 import { ensembles } from "./ensembles";
 import { members } from "./members";
 
@@ -36,10 +36,12 @@ export const eventAttendance = pgTable("event_attendance", {
   id: uuid("id").defaultRandom().primaryKey(),
   eventId: uuid("event_id")
     .notNull()
-    .references(() => events.id),
+    .references(() => events.id, { onDelete: "cascade" }),
   memberId: uuid("member_id")
     .notNull()
-    .references(() => members.id),
+    .references(() => members.id, { onDelete: "cascade" }),
   status: presenceStatusEnum("status").notNull().default("unset"),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
-});
+}, (table) => [
+  unique("event_attendance_event_member_unique").on(table.eventId, table.memberId),
+]);

@@ -1,4 +1,4 @@
-import { pgTable, uuid, varchar, timestamp, pgEnum } from "drizzle-orm/pg-core";
+import { pgTable, uuid, varchar, timestamp, pgEnum, unique } from "drizzle-orm/pg-core";
 import { ensembles } from "./ensembles";
 
 export const voiceGroupEnum = pgEnum("voice_group", ["S", "A", "T", "B"]);
@@ -17,12 +17,16 @@ export const members = pgTable("members", {
   voiceGroup: voiceGroupEnum("voice_group"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
-});
+}, (table) => [
+  unique("members_ensemble_user_unique").on(table.ensembleId, table.userId),
+]);
 
 export const memberRoles = pgTable("member_roles", {
   id: uuid("id").defaultRandom().primaryKey(),
   memberId: uuid("member_id")
     .notNull()
-    .references(() => members.id),
+    .references(() => members.id, { onDelete: "cascade" }),
   role: userRoleEnum("role").notNull(),
-});
+}, (table) => [
+  unique("member_roles_member_role_unique").on(table.memberId, table.role),
+]);

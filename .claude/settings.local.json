@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run:*)",
+      "Bash(cd \"C:/Work/Development/ensemble-app-1\" && npx shadcn@latest init -y --style new-york --base-color neutral --css-variables 2>&1)",
+      "Bash(cd \"C:/Work/Development/ensemble-app-1\" && npx shadcn@latest init -y 2>&1)",
+      "Bash(cd \"C:/Work/Development/ensemble-app-1\" && npx shadcn@latest init --help 2>&1)",
+      "Bash(cd \"C:/Work/Development/ensemble-app-1\" && npx shadcn@latest init -d -b radix -f 2>&1)"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "supabase"
+  ]
+}
