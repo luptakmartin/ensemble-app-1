@@ -7,7 +7,11 @@
       "Bash(cd \"C:/Work/Development/ensemble-app-1\" && npx shadcn@latest init -y --style new-york --base-color neutral --css-variables 2>&1)",
       "Bash(cd \"C:/Work/Development/ensemble-app-1\" && npx shadcn@latest init -y 2>&1)",
       "Bash(cd \"C:/Work/Development/ensemble-app-1\" && npx shadcn@latest init --help 2>&1)",
-      "Bash(cd \"C:/Work/Development/ensemble-app-1\" && npx shadcn@latest init -d -b radix -f 2>&1)"
+      "Bash(cd \"C:/Work/Development/ensemble-app-1\" && npx shadcn@latest init -d -b radix -f 2>&1)",
+      "Bash(cd \"C:/Work/Development/ensemble-app-1\" && npx shadcn@latest add input label card -y 2>&1)",
+      "Bash(cd \"C:/Work/Development/ensemble-app-1\" && npx drizzle-kit migrate 2>&1)",
+      "Bash(cd \"C:/Work/Development/ensemble-app-1\" && grep -l \"DATABASE_URL\" .env* 2>&1)",
+      "Bash(git add:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
