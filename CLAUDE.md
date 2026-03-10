@@ -5,6 +5,7 @@ An application to manage ensemble events and track member attendance for the mus
 # Key Documents
 - `docs/PRD.md` — Full product requirements and functional specification
 - `docs/TECH_STACK.md` — Technology choices, architecture decisions, coding guidelines
+- `docs/PLAN.md` — Implementation plan and phases
 
 Read these documents before starting any feature work.
 
