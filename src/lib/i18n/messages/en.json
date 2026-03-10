@@ -1,0 +1,79 @@
+{
+  "common": {
+    "appName": "Ensemble",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "back": "Back",
+    "confirm": "Confirm",
+    "search": "Search",
+    "noResults": "No results"
+  },
+  "auth": {
+    "login": "Log in",
+    "logout": "Log out",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot password",
+    "resetPassword": "Reset password",
+    "loginError": "Invalid email or password"
+  },
+  "events": {
+    "title": "Events",
+    "upcoming": "Upcoming",
+    "past": "Past",
+    "cardView": "Cards",
+    "calendarView": "Calendar",
+    "name": "Name",
+    "type": "Type",
+    "date": "Date",
+    "time": "Time",
+    "place": "Place",
+    "description": "Description",
+    "types": {
+      "regular_rehearsal": "Regular Rehearsal",
+      "exceptional_rehearsal": "Exceptional Rehearsal",
+      "general_rehearsal": "General Rehearsal",
+      "concert": "Concert",
+      "meeting": "Meeting"
+    }
+  },
+  "presence": {
+    "title": "Attendance",
+    "yes": "Yes",
+    "maybe": "Maybe",
+    "no": "No",
+    "unset": "Unset",
+    "summary": "Summary",
+    "detail": "Detail"
+  },
+  "compositions": {
+    "title": "Compositions",
+    "name": "Name",
+    "author": "Author",
+    "duration": "Duration",
+    "sheets": "Sheets",
+    "audio": "Audio"
+  },
+  "members": {
+    "title": "Members",
+    "voiceGroup": "Voice Group",
+    "role": "Role",
+    "roles": {
+      "admin": "Administrator",
+      "director": "Director",
+      "member": "Member"
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "picture": "Profile picture",
+    "changePassword": "Change password"
+  }
+}

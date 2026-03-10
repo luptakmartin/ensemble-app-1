@@ -1,0 +1,79 @@
+{
+  "common": {
+    "appName": "Ensemble",
+    "loading": "Načítání...",
+    "save": "Uložit",
+    "cancel": "Zrušit",
+    "delete": "Smazat",
+    "edit": "Upravit",
+    "create": "Vytvořit",
+    "back": "Zpět",
+    "confirm": "Potvrdit",
+    "search": "Hledat",
+    "noResults": "Žádné výsledky"
+  },
+  "auth": {
+    "login": "Přihlásit se",
+    "logout": "Odhlásit se",
+    "email": "E-mail",
+    "password": "Heslo",
+    "forgotPassword": "Zapomenuté heslo",
+    "resetPassword": "Obnovit heslo",
+    "loginError": "Nesprávný e-mail nebo heslo"
+  },
+  "events": {
+    "title": "Události",
+    "upcoming": "Nadcházející",
+    "past": "Minulé",
+    "cardView": "Karty",
+    "calendarView": "Kalendář",
+    "name": "Název",
+    "type": "Typ",
+    "date": "Datum",
+    "time": "Čas",
+    "place": "Místo",
+    "description": "Popis",
+    "types": {
+      "regular_rehearsal": "Pravidelná zkouška",
+      "exceptional_rehearsal": "Mimořádná zkouška",
+      "general_rehearsal": "Generální zkouška",
+      "concert": "Koncert",
+      "meeting": "Schůzka"
+    }
+  },
+  "presence": {
+    "title": "Docházka",
+    "yes": "Ano",
+    "maybe": "Možná",
+    "no": "Ne",
+    "unset": "Nenastaveno",
+    "summary": "Souhrn",
+    "detail": "Detail"
+  },
+  "compositions": {
+    "title": "Skladby",
+    "name": "Název",
+    "author": "Autor",
+    "duration": "Délka",
+    "sheets": "Noty",
+    "audio": "Audio"
+  },
+  "members": {
+    "title": "Členové",
+    "voiceGroup": "Hlasová skupina",
+    "role": "Role",
+    "roles": {
+      "admin": "Administrátor",
+      "director": "Sbormistr",
+      "member": "Člen"
+    }
+  },
+  "profile": {
+    "title": "Profil",
+    "name": "Jméno",
+    "email": "E-mail",
+    "phone": "Telefon",
+    "picture": "Profilový obrázek",
+    "changePassword": "Změnit heslo"
+  }
+}
