@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
-import type { AuthService, AuthSession } from "./auth-service";
+import { createAdminClient } from "@/lib/supabase/admin";
+import type { AuthService, AuthSession, AuthUser } from "./auth-service";
 
 export class SupabaseAuthService implements AuthService {
   async getSession(): Promise<AuthSession | null> {
@@ -70,5 +71,23 @@ export class SupabaseAuthService implements AuthService {
     if (error) {
       throw new Error(error.message);
     }
+  }
+
+  async inviteUser(email: string, password: string): Promise<AuthUser> {
+    const adminClient = createAdminClient();
+    const { data, error } = await adminClient.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true,
+    });
+
+    if (error || !data.user || !data.user.email) {
+      throw new Error(error?.message ?? "Failed to create user");
+    }
+
+    return {
+      id: data.user.id,
+      email: data.user.email,
+    };
   }
 }

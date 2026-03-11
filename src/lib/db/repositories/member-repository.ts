@@ -105,6 +105,15 @@ export class MemberRepository extends BaseRepository {
       );
   }
 
+  async setRoles(memberId: string, roles: UserRole[]): Promise<void> {
+    await this.db.delete(memberRoles).where(eq(memberRoles.memberId, memberId));
+    if (roles.length > 0) {
+      await this.db.insert(memberRoles).values(
+        roles.map((role) => ({ memberId, role }))
+      );
+    }
+  }
+
   private aggregateMembers(
     rows: {
       members: typeof members.$inferSelect;

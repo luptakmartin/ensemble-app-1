@@ -99,7 +99,26 @@
       "admin": "Administrátor",
       "director": "Sbormistr",
       "member": "Člen"
-    }
+    },
+    "invite": "Pozvat člena",
+    "inviteDescription": "Pozvěte nového člena do ansámblu.",
+    "temporaryPassword": "Dočasné heslo",
+    "temporaryPasswordNote": "Sdílejte toto heslo s novým členem. Po prvním přihlášení by si ho měl změnit.",
+    "deleteMember": "Smazat člena",
+    "confirmDelete": "Opravdu chcete smazat tohoto člena? Tuto akci nelze vrátit zpět.",
+    "editMember": "Upravit člena",
+    "backToMembers": "Zpět na členy",
+    "noMembers": "Žádní členové.",
+    "manageRoles": "Spravovat role",
+    "cannotRemoveOwnAdmin": "Nemůžete si odebrat vlastní roli administrátora.",
+    "cannotDeleteSelf": "Nemůžete smazat sami sebe.",
+    "voiceGroups": {
+      "S": "Soprán",
+      "A": "Alt",
+      "T": "Tenor",
+      "B": "Bas"
+    },
+    "allGroups": "Všechny"
   },
   "profile": {
     "title": "Profil",
@@ -107,6 +126,15 @@
     "email": "E-mail",
     "phone": "Telefon",
     "picture": "Profilový obrázek",
-    "changePassword": "Změnit heslo"
+    "changePassword": "Změnit heslo",
+    "changePicture": "Změnit obrázek",
+    "currentPassword": "Současné heslo",
+    "newPassword": "Nové heslo",
+    "confirmPassword": "Potvrzení nového hesla",
+    "passwordMismatch": "Hesla se neshodují",
+    "passwordChanged": "Heslo bylo úspěšně změněno",
+    "profileUpdated": "Profil byl úspěšně aktualizován",
+    "invalidCurrentPassword": "Nesprávné současné heslo",
+    "save": "Uložit"
   }
 }

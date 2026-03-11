@@ -14,4 +14,5 @@ export interface AuthService {
   signOut(): Promise<void>;
   resetPassword(email: string): Promise<void>;
   updatePassword(newPassword: string): Promise<void>;
+  inviteUser(email: string, password: string): Promise<AuthUser>;
 }

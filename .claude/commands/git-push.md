@@ -1,0 +1,1 @@
+Stage all changes, create a commit with a descriptive message based on what was changed, and push to origin.

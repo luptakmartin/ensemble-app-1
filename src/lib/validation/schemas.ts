@@ -57,6 +57,7 @@ export const memberProfileSchema = z.object({
   name: z.string().min(1),
   email: z.string().email(),
   phone: z.string().optional(),
+  voiceGroup: z.enum(["S", "A", "T", "B"]).nullable().optional(),
 });
 export type MemberProfileInput = z.infer<typeof memberProfileSchema>;
 
@@ -67,3 +68,16 @@ export const memberInviteSchema = z.object({
   role: z.enum(["admin", "director", "member"]),
 });
 export type MemberInviteInput = z.infer<typeof memberInviteSchema>;
+
+// Change password
+export const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1),
+  newPassword: z.string().min(8),
+});
+export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
+
+// Member roles
+export const memberRolesSchema = z.object({
+  roles: z.array(z.enum(["admin", "director", "member"])).min(1),
+});
+export type MemberRolesInput = z.infer<typeof memberRolesSchema>;
