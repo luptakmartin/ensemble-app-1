@@ -22,6 +22,7 @@ export default async function EventsPage() {
       <EventList
         upcomingEvents={upcomingEvents}
         pastEvents={pastEvents}
+        allEvents={[...upcomingEvents, ...pastEvents]}
         canEdit={canEdit}
       />
     </div>

@@ -11,6 +11,8 @@ vi.mock("next-intl", () => ({
       create: "Create Event",
       noUpcoming: "No upcoming events.",
       noPast: "No past events.",
+      cardView: "Cards",
+      calendarView: "Calendar",
     };
     return labels[key] ?? key;
   },
@@ -44,6 +46,7 @@ describe("EventList", () => {
       <EventList
         upcomingEvents={[mockEvent]}
         pastEvents={[]}
+        allEvents={[mockEvent]}
         canEdit={false}
       />
     );
@@ -52,21 +55,21 @@ describe("EventList", () => {
 
   it("shows empty state when no upcoming events", () => {
     render(
-      <EventList upcomingEvents={[]} pastEvents={[]} canEdit={false} />
+      <EventList upcomingEvents={[]} pastEvents={[]} allEvents={[]} canEdit={false} />
     );
     expect(screen.getByText("No upcoming events.")).toBeInTheDocument();
   });
 
   it('shows "Create Event" button when canEdit is true', () => {
     render(
-      <EventList upcomingEvents={[]} pastEvents={[]} canEdit={true} />
+      <EventList upcomingEvents={[]} pastEvents={[]} allEvents={[]} canEdit={true} />
     );
     expect(screen.getByText("Create Event")).toBeInTheDocument();
   });
 
   it('hides "Create Event" button when canEdit is false', () => {
     render(
-      <EventList upcomingEvents={[]} pastEvents={[]} canEdit={false} />
+      <EventList upcomingEvents={[]} pastEvents={[]} allEvents={[]} canEdit={false} />
     );
     expect(screen.queryByText("Create Event")).not.toBeInTheDocument();
   });
