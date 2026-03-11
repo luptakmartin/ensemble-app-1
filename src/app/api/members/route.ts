@@ -55,6 +55,7 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    throw error;
+    const message = error instanceof Error ? error.message : "Failed to invite member";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
