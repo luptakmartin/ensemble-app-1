@@ -1,11 +1,14 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { requireSession } from "@/lib/auth/require-session";
-import { EventRepository, AttendanceRepository } from "@/lib/db/repositories";
+import { EventRepository, AttendanceRepository, CompositionRepository } from "@/lib/db/repositories";
 import { hasRole } from "@/lib/auth/roles";
 import { EventDetail } from "@/components/events/event-detail";
 import { AttendancePanel } from "@/components/attendance/attendance-panel";
 import { Separator } from "@/components/ui/separator";
+import { Link } from "@/lib/i18n/routing";
+import { Music } from "lucide-react";
+import { EventCompositionPicker } from "@/components/compositions/event-composition-picker";
 
 export default async function EventDetailPage({
   params,
@@ -30,6 +33,10 @@ export default async function EventDetailPage({
   const attendanceRepo = new AttendanceRepository(session.ensembleId);
   const attendance = await attendanceRepo.findByEvent(event.id);
 
+  const compositionRepo = new CompositionRepository(session.ensembleId);
+  const linkedCompositions = await compositionRepo.findByEvent(event.id);
+  const allCompositions = canEdit ? await compositionRepo.findAll() : [];
+
   return (
     <div className="p-4 md:p-6">
       <h1 className="text-2xl font-bold mb-4">{t("details")}</h1>
@@ -42,6 +49,38 @@ export default async function EventDetailPage({
         isAdmin={isAdmin}
         isDirectorOrAdmin={isDirectorOrAdmin}
       />
+      <Separator className="my-6" />
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h3 className="font-medium flex items-center gap-2">
+            <Music className="h-4 w-4" />
+            Compositions
+          </h3>
+          {canEdit && (
+            <EventCompositionPicker
+              eventId={event.id}
+              allCompositions={allCompositions}
+              linkedCompositions={linkedCompositions}
+            />
+          )}
+        </div>
+        {linkedCompositions.length > 0 ? (
+          <ul className="space-y-1">
+            {linkedCompositions.map((c) => (
+              <li key={c.id}>
+                <Link
+                  href={`/compositions/${c.id}`}
+                  className="text-sm hover:underline"
+                >
+                  {c.name} — {c.author}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-sm text-muted-foreground">—</p>
+        )}
+      </div>
     </div>
   );
 }

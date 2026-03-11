@@ -74,7 +74,22 @@
     "author": "Autor",
     "duration": "Trvanie",
     "sheets": "Noty",
-    "audio": "Audio"
+    "audio": "Audio",
+    "create": "Vytvoriť skladbu",
+    "edit": "Upraviť skladbu",
+    "save": "Uložiť",
+    "delete": "Vymazať skladbu",
+    "confirmDelete": "Naozaj chcete vymazať túto skladbu? Túto akciu nie je možné vrátiť späť.",
+    "backToCompositions": "Späť na skladby",
+    "noCompositions": "Žiadne skladby.",
+    "addAttachment": "Pridať prílohu",
+    "deleteAttachment": "Vymazať prílohu",
+    "linkUrl": "Odkaz na URL",
+    "uploadFile": "Nahrať súbor",
+    "attachments": "Prílohy",
+    "addToEvent": "Pridať k udalosti",
+    "removeFromEvent": "Odobrať z udalosti",
+    "selectCompositions": "Vybrať skladby"
   },
   "members": {
     "title": "Členovia",

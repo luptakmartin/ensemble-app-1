@@ -7,3 +7,7 @@ export { EventRepository } from "./event-repository";
 export type { Event, CreateEventData, UpdateEventData } from "./event-repository";
 export { AttendanceRepository } from "./attendance-repository";
 export type { Attendance, AttendanceWithMember } from "./attendance-repository";
+export { CompositionRepository } from "./composition-repository";
+export type { Composition, CreateCompositionData, UpdateCompositionData } from "./composition-repository";
+export { AttachmentRepository } from "./attachment-repository";
+export type { Attachment } from "./attachment-repository";

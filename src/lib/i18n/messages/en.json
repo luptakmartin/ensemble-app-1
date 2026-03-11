@@ -74,7 +74,22 @@
     "author": "Author",
     "duration": "Duration",
     "sheets": "Sheets",
-    "audio": "Audio"
+    "audio": "Audio",
+    "create": "Create Composition",
+    "edit": "Edit Composition",
+    "save": "Save",
+    "delete": "Delete Composition",
+    "confirmDelete": "Are you sure you want to delete this composition? This action cannot be undone.",
+    "backToCompositions": "Back to compositions",
+    "noCompositions": "No compositions.",
+    "addAttachment": "Add Attachment",
+    "deleteAttachment": "Delete Attachment",
+    "linkUrl": "Link URL",
+    "uploadFile": "Upload File",
+    "attachments": "Attachments",
+    "addToEvent": "Add to event",
+    "removeFromEvent": "Remove from event",
+    "selectCompositions": "Select Compositions"
   },
   "members": {
     "title": "Members",

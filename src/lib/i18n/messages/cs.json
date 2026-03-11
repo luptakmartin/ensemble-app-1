@@ -74,7 +74,22 @@
     "author": "Autor",
     "duration": "Délka",
     "sheets": "Noty",
-    "audio": "Audio"
+    "audio": "Audio",
+    "create": "Vytvořit skladbu",
+    "edit": "Upravit skladbu",
+    "save": "Uložit",
+    "delete": "Smazat skladbu",
+    "confirmDelete": "Opravdu chcete smazat tuto skladbu? Tuto akci nelze vrátit zpět.",
+    "backToCompositions": "Zpět na skladby",
+    "noCompositions": "Žádné skladby.",
+    "addAttachment": "Přidat přílohu",
+    "deleteAttachment": "Smazat přílohu",
+    "linkUrl": "Odkaz na URL",
+    "uploadFile": "Nahrát soubor",
+    "attachments": "Přílohy",
+    "addToEvent": "Přidat k události",
+    "removeFromEvent": "Odebrat z události",
+    "selectCompositions": "Vybrat skladby"
   },
   "members": {
     "title": "Členové",
