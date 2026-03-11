@@ -5,3 +5,5 @@ export type { Member, UserRole, CreateMemberData, UpdateMemberData } from "./mem
 export type { Ensemble } from "./ensemble-repository";
 export { EventRepository } from "./event-repository";
 export type { Event, CreateEventData, UpdateEventData } from "./event-repository";
+export { AttendanceRepository } from "./attendance-repository";
+export type { Attendance, AttendanceWithMember } from "./attendance-repository";

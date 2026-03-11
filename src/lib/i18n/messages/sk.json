@@ -63,7 +63,10 @@
     "no": "Nie",
     "unset": "Nenastavené",
     "summary": "Súhrn",
-    "detail": "Detail"
+    "detail": "Detail",
+    "yourStatus": "Vaša dochádzka",
+    "eventStarted": "Udalosť už začala",
+    "unassigned": "Nezaradení"
   },
   "compositions": {
     "title": "Skladby",

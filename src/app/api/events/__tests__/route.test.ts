@@ -4,6 +4,7 @@ import { NextRequest } from "next/server";
 const mockFindUpcoming = vi.fn();
 const mockFindPast = vi.fn();
 const mockCreate = vi.fn();
+const mockBulkCreateForEvent = vi.fn();
 
 vi.mock("@/lib/auth/session", () => ({
   getSessionContext: vi.fn(),
@@ -16,6 +17,10 @@ vi.mock("@/lib/db/repositories", () => {
       findUpcoming = mockFindUpcoming;
       findPast = mockFindPast;
       create = mockCreate;
+    },
+    AttendanceRepository: class {
+      constructor() {}
+      bulkCreateForEvent = mockBulkCreateForEvent;
     },
   };
 });

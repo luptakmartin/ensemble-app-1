@@ -30,6 +30,11 @@ export const attendanceSchema = z.object({
 });
 export type AttendanceInput = z.infer<typeof attendanceSchema>;
 
+export const attendanceUpdateSchema = z.object({
+  status: z.enum(["yes", "maybe", "no", "unset"]),
+  memberId: z.string().uuid().optional(),
+});
+
 // Compositions
 export const compositionSchema = z.object({
   name: z.string().min(1),

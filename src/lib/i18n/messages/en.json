@@ -63,7 +63,10 @@
     "no": "No",
     "unset": "Unset",
     "summary": "Summary",
-    "detail": "Detail"
+    "detail": "Detail",
+    "yourStatus": "Your attendance",
+    "eventStarted": "Event has already started",
+    "unassigned": "Unassigned"
   },
   "compositions": {
     "title": "Compositions",

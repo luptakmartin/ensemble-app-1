@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 import { getSessionContext } from "@/lib/auth/session";
 import { hasRole } from "@/lib/auth/roles";
-import { EventRepository } from "@/lib/db/repositories";
+import { EventRepository, AttendanceRepository } from "@/lib/db/repositories";
 import { eventSchema } from "@/lib/validation/schemas";
 
 export async function GET(request: NextRequest) {
@@ -35,6 +35,10 @@ export async function POST(request: NextRequest) {
     const data = eventSchema.parse(body);
     const repo = new EventRepository(session.ensembleId);
     const event = await repo.create(data);
+
+    const attendanceRepo = new AttendanceRepository(session.ensembleId);
+    await attendanceRepo.bulkCreateForEvent(event.id);
+
     return NextResponse.json(event, { status: 201 });
   } catch (error) {
     if (error instanceof ZodError) {
