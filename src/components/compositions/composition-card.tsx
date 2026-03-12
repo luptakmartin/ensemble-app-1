@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import type { Composition } from "@/lib/db/repositories";
 import { Link } from "@/lib/i18n/routing";
+import { toast } from "sonner";
 
 export function CompositionCard({
   composition,
@@ -40,8 +41,16 @@ export function CompositionCard({
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      await fetch(`/api/compositions/${composition.id}`, { method: "DELETE" });
-      router.refresh();
+      const res = await fetch(`/api/compositions/${composition.id}`, { method: "DELETE" });
+      if (!res.ok) {
+        const data = await res.json();
+        toast.error(data.error || t("toast.error"));
+      } else {
+        toast.success(t("toast.deleteSuccess"));
+        router.refresh();
+      }
+    } catch {
+      toast.error(t("toast.networkError"));
     } finally {
       setIsDeleting(false);
       setShowDeleteDialog(false);

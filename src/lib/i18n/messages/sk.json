@@ -120,6 +120,24 @@
     },
     "allGroups": "Všetky"
   },
+  "toast": {
+    "saveSuccess": "Úspešne uložené",
+    "deleteSuccess": "Úspešne vymazané",
+    "error": "Vyskytla sa chyba",
+    "networkError": "Chyba siete. Skúste to prosím znova.",
+    "attendanceUpdated": "Dochádzka aktualizovaná",
+    "inviteSent": "Pozvánka odoslaná",
+    "passwordChanged": "Heslo bolo úspešne zmenené",
+    "profileUpdated": "Profil bol úspešne aktualizovaný",
+    "attachmentAdded": "Príloha pridaná",
+    "attachmentDeleted": "Príloha vymazaná",
+    "compositionLinked": "Skladba pridaná k udalosti",
+    "compositionUnlinked": "Skladba odobraná z udalosti"
+  },
+  "error": {
+    "title": "Niečo sa pokazilo",
+    "tryAgain": "Skúsiť znova"
+  },
   "profile": {
     "title": "Profil",
     "name": "Meno",

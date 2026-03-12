@@ -120,6 +120,24 @@
     },
     "allGroups": "All"
   },
+  "toast": {
+    "saveSuccess": "Saved successfully",
+    "deleteSuccess": "Deleted successfully",
+    "error": "An error occurred",
+    "networkError": "Network error. Please try again.",
+    "attendanceUpdated": "Attendance updated",
+    "inviteSent": "Invitation sent",
+    "passwordChanged": "Password changed successfully",
+    "profileUpdated": "Profile updated successfully",
+    "attachmentAdded": "Attachment added",
+    "attachmentDeleted": "Attachment deleted",
+    "compositionLinked": "Composition linked to event",
+    "compositionUnlinked": "Composition removed from event"
+  },
+  "error": {
+    "title": "Something went wrong",
+    "tryAgain": "Try again"
+  },
   "profile": {
     "title": "Profile",
     "name": "Name",

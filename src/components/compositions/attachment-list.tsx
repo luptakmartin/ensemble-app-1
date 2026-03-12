@@ -6,6 +6,7 @@ import { useRouter } from "@/lib/i18n/routing";
 import { FileMusic, Headphones, ExternalLink, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Attachment } from "@/lib/db/repositories";
+import { toast } from "sonner";
 
 export function AttachmentList({
   attachments,
@@ -17,6 +18,7 @@ export function AttachmentList({
   canEdit: boolean;
 }) {
   const t = useTranslations("compositions");
+  const tToast = useTranslations("toast");
   const router = useRouter();
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
@@ -26,11 +28,19 @@ export function AttachmentList({
   const handleDelete = async (attachmentId: string) => {
     setDeletingId(attachmentId);
     try {
-      await fetch(
+      const res = await fetch(
         `/api/compositions/${compositionId}/attachments/${attachmentId}`,
         { method: "DELETE" }
       );
-      router.refresh();
+      if (!res.ok) {
+        const data = await res.json();
+        toast.error(data.error || tToast("error"));
+      } else {
+        toast.success(tToast("attachmentDeleted"));
+        router.refresh();
+      }
+    } catch {
+      toast.error(tToast("networkError"));
     } finally {
       setDeletingId(null);
     }

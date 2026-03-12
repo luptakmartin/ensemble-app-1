@@ -8,6 +8,7 @@ import { AttendanceSummary } from "./attendance-summary";
 import { AttendanceDetail } from "./attendance-detail";
 import { hasEventStarted } from "@/lib/utils/event-time";
 import type { Event, AttendanceWithMember } from "@/lib/db/repositories";
+import { toast } from "sonner";
 
 type PresenceStatus = "yes" | "maybe" | "no" | "unset";
 
@@ -25,6 +26,7 @@ export function AttendancePanel({
   isDirectorOrAdmin: boolean;
 }) {
   const t = useTranslations("presence");
+  const tToast = useTranslations("toast");
   const [attendance, setAttendance] = useState(initialAttendance);
 
   const eventStarted = hasEventStarted(event.date, event.time);
@@ -62,9 +64,11 @@ export function AttendancePanel({
 
       if (!res.ok) {
         setAttendance(previous);
+        toast.error(tToast("error"));
       }
     } catch {
       setAttendance(previous);
+      toast.error(tToast("networkError"));
     }
   };
 

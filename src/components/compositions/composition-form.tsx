@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
@@ -10,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { Composition } from "@/lib/db/repositories";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -28,7 +28,6 @@ export function CompositionForm({
 }) {
   const t = useTranslations();
   const router = useRouter();
-  const [serverError, setServerError] = useState<string | null>(null);
 
   const {
     register,
@@ -46,8 +45,6 @@ export function CompositionForm({
   });
 
   const onSubmit = async (data: FormValues) => {
-    setServerError(null);
-
     const body = {
       name: data.name,
       author: data.author,
@@ -60,19 +57,24 @@ export function CompositionForm({
         : `/api/compositions/${composition!.id}`;
     const method = mode === "create" ? "POST" : "PUT";
 
-    const response = await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
+    try {
+      const response = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
 
-    if (!response.ok) {
-      const error = await response.json();
-      setServerError(error.error || "An error occurred");
-      return;
+      if (!response.ok) {
+        const error = await response.json();
+        toast.error(error.error || t("toast.error"));
+        return;
+      }
+
+      toast.success(t("toast.saveSuccess"));
+      router.push("/compositions");
+    } catch {
+      toast.error(t("toast.networkError"));
     }
-
-    router.push("/compositions");
   };
 
   return (
@@ -97,10 +99,6 @@ export function CompositionForm({
         <Label htmlFor="duration">{t("compositions.duration")}</Label>
         <Input id="duration" {...register("duration")} placeholder="3:45" />
       </div>
-
-      {serverError && (
-        <p className="text-sm text-destructive">{serverError}</p>
-      )}
 
       <div className="flex gap-2">
         <Button type="submit" disabled={isSubmitting}>

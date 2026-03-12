@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { memberInviteSchema, type MemberInviteInput } from "@/lib/validation/schemas";
+import { toast } from "sonner";
 
 const roles = ["admin", "director", "member"] as const;
 
@@ -36,7 +37,6 @@ export function InviteMemberDialog({
   const t = useTranslations();
   const router = useRouter();
   const [tempPassword, setTempPassword] = useState<string | null>(null);
-  const [serverError, setServerError] = useState<string | null>(null);
 
   const {
     register,
@@ -53,29 +53,31 @@ export function InviteMemberDialog({
   const selectedRole = watch("role");
 
   const onSubmit = async (data: MemberInviteInput) => {
-    setServerError(null);
+    try {
+      const response = await fetch("/api/members", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
-    const response = await fetch("/api/members", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
+      if (!response.ok) {
+        const error = await response.json();
+        toast.error(error.error || t("toast.error"));
+        return;
+      }
 
-    if (!response.ok) {
-      const error = await response.json();
-      setServerError(error.error || "An error occurred");
-      return;
+      const result = await response.json();
+      setTempPassword(result.temporaryPassword);
+      toast.success(t("toast.inviteSent"));
+      router.refresh();
+    } catch {
+      toast.error(t("toast.networkError"));
     }
-
-    const result = await response.json();
-    setTempPassword(result.temporaryPassword);
-    router.refresh();
   };
 
   const handleClose = (open: boolean) => {
     if (!open) {
       setTempPassword(null);
-      setServerError(null);
       reset();
     }
     onOpenChange(open);
@@ -142,10 +144,6 @@ export function InviteMemberDialog({
                 </SelectContent>
               </Select>
             </div>
-
-            {serverError && (
-              <p className="text-sm text-destructive">{serverError}</p>
-            )}
 
             <div className="flex gap-2">
               <Button type="submit" disabled={isSubmitting}>

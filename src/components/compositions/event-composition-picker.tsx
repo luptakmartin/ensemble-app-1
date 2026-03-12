@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import type { Composition } from "@/lib/db/repositories";
+import { toast } from "sonner";
 
 export function EventCompositionPicker({
   eventId,
@@ -25,6 +26,7 @@ export function EventCompositionPicker({
   linkedCompositions: Composition[];
 }) {
   const t = useTranslations("compositions");
+  const tToast = useTranslations("toast");
   const router = useRouter();
   const [linkedIds, setLinkedIds] = useState<Set<string>>(
     new Set(linkedCompositions.map((c) => c.id))
@@ -35,25 +37,40 @@ export function EventCompositionPicker({
     setLoading(compositionId);
     try {
       if (isLinked) {
-        await fetch(`/api/events/${eventId}/compositions`, {
+        const res = await fetch(`/api/events/${eventId}/compositions`, {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ compositionId }),
         });
-        setLinkedIds((prev) => {
-          const next = new Set(prev);
-          next.delete(compositionId);
-          return next;
-        });
+        if (!res.ok) {
+          const data = await res.json();
+          toast.error(data.error || tToast("error"));
+        } else {
+          setLinkedIds((prev) => {
+            const next = new Set(prev);
+            next.delete(compositionId);
+            return next;
+          });
+          toast.success(tToast("compositionUnlinked"));
+          router.refresh();
+        }
       } else {
-        await fetch(`/api/events/${eventId}/compositions`, {
+        const res = await fetch(`/api/events/${eventId}/compositions`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ compositionId }),
         });
-        setLinkedIds((prev) => new Set(prev).add(compositionId));
+        if (!res.ok) {
+          const data = await res.json();
+          toast.error(data.error || tToast("error"));
+        } else {
+          setLinkedIds((prev) => new Set(prev).add(compositionId));
+          toast.success(tToast("compositionLinked"));
+          router.refresh();
+        }
       }
-      router.refresh();
+    } catch {
+      toast.error(tToast("networkError"));
     } finally {
       setLoading(null);
     }

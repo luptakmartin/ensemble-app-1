@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
@@ -18,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { Event } from "@/lib/db/repositories";
+import { toast } from "sonner";
 
 const eventTypes = [
   "regular_rehearsal",
@@ -52,7 +52,6 @@ export function EventForm({
 }) {
   const t = useTranslations();
   const router = useRouter();
-  const [serverError, setServerError] = useState<string | null>(null);
 
   const {
     register,
@@ -79,8 +78,6 @@ export function EventForm({
   const selectedType = watch("type");
 
   const onSubmit = async (data: FormValues) => {
-    setServerError(null);
-
     // Combine date + time into ISO datetime string
     const dateTime = new Date(`${data.date}T${data.time}:00`).toISOString();
 
@@ -97,19 +94,24 @@ export function EventForm({
       mode === "create" ? "/api/events" : `/api/events/${event!.id}`;
     const method = mode === "create" ? "POST" : "PUT";
 
-    const response = await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
+    try {
+      const response = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
 
-    if (!response.ok) {
-      const error = await response.json();
-      setServerError(error.error || "An error occurred");
-      return;
+      if (!response.ok) {
+        const error = await response.json();
+        toast.error(error.error || t("toast.error"));
+        return;
+      }
+
+      toast.success(t("toast.saveSuccess"));
+      router.push("/events");
+    } catch {
+      toast.error(t("toast.networkError"));
     }
-
-    router.push("/events");
   };
 
   return (
@@ -176,10 +178,6 @@ export function EventForm({
         <Label htmlFor="description">{t("events.description")}</Label>
         <Textarea id="description" rows={3} {...register("description")} />
       </div>
-
-      {serverError && (
-        <p className="text-sm text-destructive">{serverError}</p>
-      )}
 
       <div className="flex gap-2">
         <Button type="submit" disabled={isSubmitting}>

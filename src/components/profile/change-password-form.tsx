@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
@@ -8,6 +7,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 const changePasswordFormSchema = z
   .object({
@@ -23,8 +23,6 @@ type FormValues = z.infer<typeof changePasswordFormSchema>;
 
 export function ChangePasswordForm() {
   const t = useTranslations();
-  const [serverError, setServerError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
 
   const {
     register,
@@ -36,26 +34,27 @@ export function ChangePasswordForm() {
   });
 
   const onSubmit = async (data: FormValues) => {
-    setServerError(null);
-    setSuccess(false);
+    try {
+      const response = await fetch("/api/profile/password", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          currentPassword: data.currentPassword,
+          newPassword: data.newPassword,
+        }),
+      });
 
-    const response = await fetch("/api/profile/password", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        currentPassword: data.currentPassword,
-        newPassword: data.newPassword,
-      }),
-    });
+      if (!response.ok) {
+        const error = await response.json();
+        toast.error(error.error || t("toast.error"));
+        return;
+      }
 
-    if (!response.ok) {
-      const error = await response.json();
-      setServerError(error.error || "An error occurred");
-      return;
+      toast.success(t("toast.passwordChanged"));
+      reset();
+    } catch {
+      toast.error(t("toast.networkError"));
     }
-
-    setSuccess(true);
-    reset();
   };
 
   return (
@@ -103,13 +102,6 @@ export function ChangePasswordForm() {
           </p>
         )}
       </div>
-
-      {serverError && (
-        <p className="text-sm text-destructive">{serverError}</p>
-      )}
-      {success && (
-        <p className="text-sm text-green-600">{t("profile.passwordChanged")}</p>
-      )}
 
       <Button type="submit" disabled={isSubmitting}>
         {isSubmitting ? t("common.loading") : t("profile.changePassword")}

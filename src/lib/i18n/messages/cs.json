@@ -120,6 +120,24 @@
     },
     "allGroups": "Všechny"
   },
+  "toast": {
+    "saveSuccess": "Úspěšně uloženo",
+    "deleteSuccess": "Úspěšně smazáno",
+    "error": "Došlo k chybě",
+    "networkError": "Chyba sítě. Zkuste to prosím znovu.",
+    "attendanceUpdated": "Docházka aktualizována",
+    "inviteSent": "Pozvánka odeslána",
+    "passwordChanged": "Heslo bylo úspěšně změněno",
+    "profileUpdated": "Profil byl úspěšně aktualizován",
+    "attachmentAdded": "Příloha přidána",
+    "attachmentDeleted": "Příloha smazána",
+    "compositionLinked": "Skladba přidána k události",
+    "compositionUnlinked": "Skladba odebrána z události"
+  },
+  "error": {
+    "title": "Něco se pokazilo",
+    "tryAgain": "Zkusit znovu"
+  },
   "profile": {
     "title": "Profil",
     "name": "Jméno",

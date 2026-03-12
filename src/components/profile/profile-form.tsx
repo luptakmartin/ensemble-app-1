@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
@@ -11,12 +10,11 @@ import { Label } from "@/components/ui/label";
 import { VoiceGroupSelect } from "@/components/members/voice-group-select";
 import { memberProfileSchema, type MemberProfileInput } from "@/lib/validation/schemas";
 import type { Member } from "@/lib/db/repositories";
+import { toast } from "sonner";
 
 export function ProfileForm({ member }: { member: Member }) {
   const t = useTranslations();
   const router = useRouter();
-  const [serverError, setServerError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
 
   const {
     register,
@@ -37,23 +35,24 @@ export function ProfileForm({ member }: { member: Member }) {
   const voiceGroup = watch("voiceGroup");
 
   const onSubmit = async (data: MemberProfileInput) => {
-    setServerError(null);
-    setSuccess(false);
+    try {
+      const response = await fetch("/api/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
-    const response = await fetch("/api/profile", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
+      if (!response.ok) {
+        const error = await response.json();
+        toast.error(error.error || t("toast.error"));
+        return;
+      }
 
-    if (!response.ok) {
-      const error = await response.json();
-      setServerError(error.error || "An error occurred");
-      return;
+      toast.success(t("toast.profileUpdated"));
+      router.refresh();
+    } catch {
+      toast.error(t("toast.networkError"));
     }
-
-    setSuccess(true);
-    router.refresh();
   };
 
   const handlePictureUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -112,13 +111,6 @@ export function ProfileForm({ member }: { member: Member }) {
           onChange={(v) => setValue("voiceGroup", v as MemberProfileInput["voiceGroup"])}
         />
       </div>
-
-      {serverError && (
-        <p className="text-sm text-destructive">{serverError}</p>
-      )}
-      {success && (
-        <p className="text-sm text-green-600">{t("profile.profileUpdated")}</p>
-      )}
 
       <Button type="submit" disabled={isSubmitting}>
         {isSubmitting ? t("common.loading") : t("profile.save")}

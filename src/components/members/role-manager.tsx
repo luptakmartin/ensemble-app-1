@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import type { UserRole } from "@/lib/db/repositories";
+import { toast } from "sonner";
 
 const allRoles: UserRole[] = ["admin", "director", "member"];
 
@@ -20,10 +21,10 @@ export function RoleManager({
   isSelf: boolean;
 }) {
   const t = useTranslations("members");
+  const tToast = useTranslations("toast");
   const router = useRouter();
   const [roles, setRoles] = useState<UserRole[]>(currentRoles);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const toggleRole = (role: UserRole) => {
     setRoles((prev) =>
@@ -32,7 +33,6 @@ export function RoleManager({
   };
 
   const handleSave = async () => {
-    setError(null);
     setIsSubmitting(true);
 
     try {
@@ -44,11 +44,14 @@ export function RoleManager({
 
       if (!response.ok) {
         const data = await response.json();
-        setError(data.error);
+        toast.error(data.error || tToast("error"));
         return;
       }
 
+      toast.success(tToast("saveSuccess"));
       router.refresh();
+    } catch {
+      toast.error(tToast("networkError"));
     } finally {
       setIsSubmitting(false);
     }
@@ -80,8 +83,6 @@ export function RoleManager({
           );
         })}
       </div>
-
-      {error && <p className="text-sm text-destructive">{error}</p>}
 
       <Button
         onClick={handleSave}

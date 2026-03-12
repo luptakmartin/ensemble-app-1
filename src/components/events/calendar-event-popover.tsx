@@ -11,6 +11,7 @@ import { EventTypeBadge } from "./event-type-badge";
 import { PresenceButton } from "@/components/attendance/presence-button";
 import type { Event } from "@/lib/db/repositories";
 import { Link } from "@/lib/i18n/routing";
+import { toast } from "sonner";
 
 type PresenceStatus = "yes" | "maybe" | "no" | "unset";
 
@@ -30,8 +31,8 @@ export function CalendarEventPopover({
   rect: { x: number; y: number };
   onClose: () => void;
 }) {
-  const t = useTranslations("events");
   const tPresence = useTranslations("presence");
+  const tToast = useTranslations("toast");
   const locale = useLocale();
   const popoverRef = useRef<HTMLDivElement>(null);
   const [status, setStatus] = useState<PresenceStatus>("unset");
@@ -67,12 +68,22 @@ export function CalendarEventPopover({
   }, [onClose]);
 
   const handleStatusChange = async (newStatus: PresenceStatus) => {
+    const previous = status;
     setStatus(newStatus);
-    await fetch(`/api/events/${event.id}/attendance`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: newStatus }),
-    });
+    try {
+      const res = await fetch(`/api/events/${event.id}/attendance`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (!res.ok) {
+        setStatus(previous);
+        toast.error(tToast("error"));
+      }
+    } catch {
+      setStatus(previous);
+      toast.error(tToast("networkError"));
+    }
   };
 
   return (

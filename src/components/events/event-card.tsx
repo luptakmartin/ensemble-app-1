@@ -28,6 +28,7 @@ import {
 import { EventTypeBadge } from "./event-type-badge";
 import type { Event } from "@/lib/db/repositories";
 import { Link } from "@/lib/i18n/routing";
+import { toast } from "sonner";
 
 const dateLocales: Record<string, Locale> = { cs, sk, en: enUS };
 const dateFormats: Record<string, string> = {
@@ -56,8 +57,16 @@ export function EventCard({
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      await fetch(`/api/events/${event.id}`, { method: "DELETE" });
-      router.refresh();
+      const res = await fetch(`/api/events/${event.id}`, { method: "DELETE" });
+      if (!res.ok) {
+        const data = await res.json();
+        toast.error(data.error || t("toast.error"));
+      } else {
+        toast.success(t("toast.deleteSuccess"));
+        router.refresh();
+      }
+    } catch {
+      toast.error(t("toast.networkError"));
     } finally {
       setIsDeleting(false);
       setShowDeleteDialog(false);

@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { EventTypeBadge } from "./event-type-badge";
 import type { Event } from "@/lib/db/repositories";
+import { toast } from "sonner";
 
 const dateLocales: Record<string, Locale> = { cs, sk, en: enUS };
 const dateFormats: Record<string, string> = {
@@ -49,8 +50,16 @@ export function EventDetail({
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      await fetch(`/api/events/${event.id}`, { method: "DELETE" });
-      router.push("/events");
+      const res = await fetch(`/api/events/${event.id}`, { method: "DELETE" });
+      if (!res.ok) {
+        const data = await res.json();
+        toast.error(data.error || t("toast.error"));
+      } else {
+        toast.success(t("toast.deleteSuccess"));
+        router.push("/events");
+      }
+    } catch {
+      toast.error(t("toast.networkError"));
     } finally {
       setIsDeleting(false);
     }

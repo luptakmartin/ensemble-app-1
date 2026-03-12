@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner";
 
 export function AttachmentUpload({
   compositionId,
@@ -20,6 +21,7 @@ export function AttachmentUpload({
   compositionId: string;
 }) {
   const t = useTranslations("compositions");
+  const tToast = useTranslations("toast");
   const router = useRouter();
   const [mode, setMode] = useState<"link" | "file">("link");
   const [name, setName] = useState("");
@@ -33,8 +35,9 @@ export function AttachmentUpload({
     setIsSubmitting(true);
 
     try {
+      let res: Response;
       if (mode === "link") {
-        await fetch(`/api/compositions/${compositionId}/attachments`, {
+        res = await fetch(`/api/compositions/${compositionId}/attachments`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ name, url, type, isLink: true }),
@@ -46,16 +49,24 @@ export function AttachmentUpload({
         formData.append("name", name);
         formData.append("type", type);
 
-        await fetch(`/api/compositions/${compositionId}/attachments`, {
+        res = await fetch(`/api/compositions/${compositionId}/attachments`, {
           method: "POST",
           body: formData,
         });
       }
 
-      setName("");
-      setUrl("");
-      setFile(null);
-      router.refresh();
+      if (!res.ok) {
+        const data = await res.json();
+        toast.error(data.error || tToast("error"));
+      } else {
+        toast.success(tToast("attachmentAdded"));
+        setName("");
+        setUrl("");
+        setFile(null);
+        router.refresh();
+      }
+    } catch {
+      toast.error(tToast("networkError"));
     } finally {
       setIsSubmitting(false);
     }
