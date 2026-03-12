@@ -32,9 +32,9 @@ export default async function LocaleLayout({
       <body>
         <NextIntlClientProvider messages={messages}>
           {children}
+          <Toaster position="bottom-center" offset={64} />
+          <ServiceWorkerRegister />
         </NextIntlClientProvider>
-        <Toaster position="bottom-center" offset={64} />
-        <ServiceWorkerRegister />
       </body>
     </html>
   );
