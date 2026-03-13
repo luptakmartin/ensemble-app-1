@@ -16,17 +16,23 @@ test.describe("Events page", () => {
     await eventsPage.goto();
 
     await eventsPage.pastTab.click();
-    await expect(eventsPage.pastTab).toHaveAttribute("data-state", "active");
+    await expect(eventsPage.pastTab).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
 
     await eventsPage.upcomingTab.click();
     await expect(eventsPage.upcomingTab).toHaveAttribute(
-      "data-state",
-      "active",
+      "aria-selected",
+      "true",
     );
   });
+});
+
+test.describe("Events page (admin)", () => {
+  test.use({ storageState: "./e2e/.auth/admin.json" });
 
   test("admin sees create event button", async ({ eventsPage }) => {
-    // Default storageState for chromium project is admin
     await eventsPage.goto();
     await expect(eventsPage.createButton).toBeVisible();
   });

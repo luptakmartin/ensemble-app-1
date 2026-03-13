@@ -6,10 +6,10 @@ dotenv.config({ path: path.resolve(__dirname, "e2e/.env.e2e") });
 
 export default defineConfig({
   testDir: "./e2e/tests",
-  fullyParallel: true,
+  fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  workers: process.env.CI ? 1 : 2,
   reporter: [["html", { open: "never" }]],
   timeout: 30_000,
   expect: { timeout: 10_000 },

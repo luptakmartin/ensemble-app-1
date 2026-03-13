@@ -7,6 +7,10 @@ test.describe("Compositions page", () => {
       page.getByRole("heading", { name: "Skladby" }),
     ).toBeVisible();
   });
+});
+
+test.describe("Compositions page (admin)", () => {
+  test.use({ storageState: "./e2e/.auth/admin.json" });
 
   test("admin sees create composition button", async ({ page }) => {
     await page.goto("/cs/compositions");

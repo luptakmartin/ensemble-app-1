@@ -26,7 +26,12 @@ test.describe("Authentication", () => {
     );
   });
 
-  test("logs out and returns to login", async ({ page }) => {
+  test("logs out and returns to login", async ({ page }, testInfo) => {
+    test.skip(
+      testInfo.project.name === "mobile",
+      "logout button in sidebar, hidden on mobile",
+    );
+
     // First log in
     await page.goto("/cs/login");
     await page.getByLabel("E-mail").fill(testAccounts.admin.email);

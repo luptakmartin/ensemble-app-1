@@ -15,5 +15,6 @@ export class EventsPage {
 
   async goto() {
     await this.page.goto("/cs/events");
+    await this.page.waitForLoadState("networkidle");
   }
 }

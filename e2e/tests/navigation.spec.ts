@@ -1,6 +1,10 @@
 import { test, expect } from "../fixtures/test";
 
 test.describe("Sidebar navigation (desktop)", () => {
+  test.beforeEach(({}, testInfo) => {
+    test.skip(testInfo.project.name === "mobile", "sidebar hidden on mobile");
+  });
+
   test("navigates to events", async ({ page, nav }) => {
     await page.goto("/cs/profile");
     await nav.eventsLink.first().click();
@@ -18,6 +22,13 @@ test.describe("Sidebar navigation (desktop)", () => {
     await nav.profileLink.first().click();
     await expect(page).toHaveURL(/\/cs\/profile/);
   });
+});
+
+test.describe("Sidebar navigation (admin)", () => {
+  test.beforeEach(({}, testInfo) => {
+    test.skip(testInfo.project.name === "mobile", "sidebar hidden on mobile");
+  });
+  test.use({ storageState: "./e2e/.auth/admin.json" });
 
   test("admin sees members link", async ({ page, nav }) => {
     await page.goto("/cs/events");
@@ -26,9 +37,11 @@ test.describe("Sidebar navigation (desktop)", () => {
 });
 
 test.describe("Mobile navigation", () => {
-  test.use({
-    viewport: { width: 375, height: 667 },
-    storageState: "./e2e/.auth/member.json",
+  test.beforeEach(({}, testInfo) => {
+    test.skip(
+      testInfo.project.name === "chromium",
+      "bottom nav hidden on desktop",
+    );
   });
 
   test("shows bottom nav on mobile", async ({ page }) => {

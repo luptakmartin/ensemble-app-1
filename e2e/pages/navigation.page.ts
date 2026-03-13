@@ -25,5 +25,6 @@ export class NavigationPage {
 
   async navigateTo(path: string) {
     await this.page.goto(`/cs${path}`);
+    await this.page.waitForLoadState("networkidle");
   }
 }
