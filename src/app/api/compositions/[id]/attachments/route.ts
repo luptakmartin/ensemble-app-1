@@ -8,6 +8,16 @@ import { getStorageService } from "@/lib/services/storage";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
+function deriveNameFromUrl(url: string): string {
+  try {
+    const pathname = new URL(url).pathname;
+    const filename = decodeURIComponent(pathname.split("/").pop() || "");
+    return filename || url;
+  } catch {
+    return url;
+  }
+}
+
 export async function GET(request: NextRequest, { params }: RouteParams) {
   const session = await getSessionContext();
   if (!session) {
@@ -54,10 +64,11 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     try {
       const body = await request.json();
       const data = attachmentSchema.parse(body);
+      const derivedName = data.name || deriveNameFromUrl(data.url);
       const attachment = await attachmentRepo.create({
         compositionId: id,
         type: data.type,
-        name: data.name,
+        name: derivedName,
         url: data.url,
         isLink: true,
       });
@@ -78,9 +89,9 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     const name = formData.get("name") as string | null;
     const type = formData.get("type") as string | null;
 
-    if (!file || !name || !type) {
+    if (!file || !type) {
       return NextResponse.json(
-        { error: "Missing file, name, or type" },
+        { error: "Missing file or type" },
         { status: 400 }
       );
     }
@@ -92,6 +103,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       );
     }
 
+    const derivedFileName = name || file.name;
+
     const storageService = await getStorageService();
     const uuid = crypto.randomUUID();
     const storagePath = `compositions/${session.ensembleId}/${id}/${uuid}`;
@@ -100,7 +113,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     const attachment = await attachmentRepo.create({
       compositionId: id,
       type,
-      name,
+      name: derivedFileName,
       url: result.url,
       isLink: false,
     });

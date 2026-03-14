@@ -3,8 +3,16 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/lib/i18n/routing";
-import { FileMusic, Headphones, ExternalLink, Trash2 } from "lucide-react";
+import { FileText, Headphones, ExternalLink, Trash2, Pencil, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { Attachment } from "@/lib/db/repositories";
 import { toast } from "sonner";
 
@@ -21,6 +29,9 @@ export function AttachmentList({
   const tToast = useTranslations("toast");
   const router = useRouter();
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editType, setEditType] = useState<"sheet" | "audio">("sheet");
 
   const sheets = attachments.filter((a) => a.type === "sheet");
   const audio = attachments.filter((a) => a.type === "audio");
@@ -46,8 +57,88 @@ export function AttachmentList({
     }
   };
 
+  const startEdit = (attachment: Attachment) => {
+    setEditingId(attachment.id);
+    setEditName(attachment.name);
+    setEditType(attachment.type);
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditName("");
+    setEditType("sheet");
+  };
+
+  const handleSave = async () => {
+    if (!editingId || !editName.trim()) return;
+    try {
+      const res = await fetch(
+        `/api/compositions/${compositionId}/attachments/${editingId}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: editName, type: editType }),
+        }
+      );
+      if (!res.ok) {
+        const data = await res.json();
+        toast.error(data.error || tToast("error"));
+      } else {
+        toast.success(tToast("attachmentUpdated"));
+        cancelEdit();
+        router.refresh();
+      }
+    } catch {
+      toast.error(tToast("networkError"));
+    }
+  };
+
   const renderItem = (attachment: Attachment) => {
-    const Icon = attachment.type === "sheet" ? FileMusic : Headphones;
+    const Icon = attachment.type === "sheet" ? FileText : Headphones;
+
+    if (editingId === attachment.id) {
+      return (
+        <div
+          key={attachment.id}
+          className="flex items-center gap-2 py-1"
+        >
+          <Input
+            value={editName}
+            onChange={(e) => setEditName(e.target.value)}
+            className="h-8 max-w-[200px]"
+            data-testid="edit-name-input"
+          />
+          <Select value={editType} onValueChange={(v) => setEditType(v as "sheet" | "audio")}>
+            <SelectTrigger className="h-8 w-[100px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="sheet">{t("sheets")}</SelectItem>
+              <SelectItem value="audio">{t("audio")}</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7"
+            onClick={handleSave}
+            data-testid="save-edit-button"
+          >
+            <Check className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7"
+            onClick={cancelEdit}
+            data-testid="cancel-edit-button"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
+      );
+    }
+
     return (
       <div
         key={attachment.id}
@@ -64,15 +155,26 @@ export function AttachmentList({
           {attachment.isLink && <ExternalLink className="h-3 w-3" />}
         </a>
         {canEdit && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-7 w-7"
-            onClick={() => handleDelete(attachment.id)}
-            disabled={deletingId === attachment.id}
-          >
-            <Trash2 className="h-4 w-4 text-destructive" />
-          </Button>
+          <div className="flex gap-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7"
+              onClick={() => startEdit(attachment)}
+              data-testid="edit-attachment-button"
+            >
+              <Pencil className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7"
+              onClick={() => handleDelete(attachment.id)}
+              disabled={deletingId === attachment.id}
+            >
+              <Trash2 className="h-4 w-4 text-destructive" />
+            </Button>
+          </div>
         )}
       </div>
     );

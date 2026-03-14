@@ -2,30 +2,37 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 
 vi.mock("@/lib/db/drizzle", () => {
   const returningMock = vi.fn();
+  const groupByMock = vi.fn(() => Promise.resolve([]));
   const orderByMock = vi.fn(() => Promise.resolve([]));
-  const selectWhereMock = vi.fn(() => ({ orderBy: orderByMock }));
+  const selectWhereMock = vi.fn(() => ({ orderBy: orderByMock, groupBy: groupByMock }));
   const fromMock = vi.fn(() => ({ where: selectWhereMock }));
   const selectMock = vi.fn(() => ({ from: fromMock }));
   const valuesMock = vi.fn(() => ({ returning: returningMock }));
   const insertMock = vi.fn(() => ({ values: valuesMock }));
   const deleteWhereMock = vi.fn(() => ({ returning: returningMock }));
   const deleteMock = vi.fn(() => ({ where: deleteWhereMock }));
+  const updateSetMock = vi.fn(() => ({ where: vi.fn(() => ({ returning: returningMock })) }));
+  const updateMock = vi.fn(() => ({ set: updateSetMock }));
 
   return {
     db: {
       select: selectMock,
       insert: insertMock,
       delete: deleteMock,
+      update: updateMock,
       _mocks: {
         selectMock,
         fromMock,
         selectWhereMock,
+        groupByMock,
         orderByMock,
         insertMock,
         valuesMock,
         returningMock,
         deleteMock,
         deleteWhereMock,
+        updateMock,
+        updateSetMock,
       },
     },
   };
@@ -42,6 +49,22 @@ describe("AttachmentRepository", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     repo = new AttachmentRepository();
+  });
+
+  describe("countByCompositionIds", () => {
+    it("returns empty object for empty input", async () => {
+      const result = await repo.countByCompositionIds([]);
+      expect(result).toEqual({});
+    });
+
+    it("returns counts grouped by compositionId", async () => {
+      mocks.groupByMock.mockResolvedValue([
+        { compositionId: "c1", count: 3 },
+        { compositionId: "c2", count: 1 },
+      ]);
+      const result = await repo.countByCompositionIds(["c1", "c2"]);
+      expect(result).toEqual({ c1: 3, c2: 1 });
+    });
   });
 
   describe("findByComposition", () => {
@@ -73,6 +96,21 @@ describe("AttachmentRepository", () => {
         isLink: true,
       });
       expect(result).toEqual(attachment);
+    });
+  });
+
+  describe("update", () => {
+    it("updates and returns updated row", async () => {
+      const updated = { id: "a1", name: "renamed.pdf", type: "audio" };
+      mocks.returningMock.mockResolvedValue([updated]);
+      const result = await repo.update("a1", { name: "renamed.pdf", type: "audio" });
+      expect(result).toEqual(updated);
+    });
+
+    it("returns null when not found", async () => {
+      mocks.returningMock.mockResolvedValue([]);
+      const result = await repo.update("nonexistent", { name: "test" });
+      expect(result).toBeNull();
     });
   });
 

@@ -89,7 +89,9 @@
     "attachments": "Attachments",
     "addToEvent": "Add to event",
     "removeFromEvent": "Remove from event",
-    "selectCompositions": "Select Compositions"
+    "selectCompositions": "Select Compositions",
+    "editAttachment": "Edit Attachment",
+    "dropFilesHere": "Drop files here"
   },
   "members": {
     "title": "Members",
@@ -132,7 +134,8 @@
     "attachmentAdded": "Attachment added",
     "attachmentDeleted": "Attachment deleted",
     "compositionLinked": "Composition linked to event",
-    "compositionUnlinked": "Composition removed from event"
+    "compositionUnlinked": "Composition removed from event",
+    "attachmentUpdated": "Attachment updated"
   },
   "error": {
     "title": "Something went wrong",

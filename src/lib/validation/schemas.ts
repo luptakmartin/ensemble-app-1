@@ -45,12 +45,19 @@ export type CompositionInput = z.infer<typeof compositionSchema>;
 
 // Attachments
 export const attachmentSchema = z.object({
-  name: z.string().min(1),
+  name: z.string().min(1).optional(),
   url: z.string().url(),
   type: z.enum(["sheet", "audio"]),
   isLink: z.boolean(),
 });
 export type AttachmentInput = z.infer<typeof attachmentSchema>;
+
+// Attachment update
+export const attachmentUpdateSchema = z.object({
+  name: z.string().min(1),
+  type: z.enum(["sheet", "audio"]),
+});
+export type AttachmentUpdateInput = z.infer<typeof attachmentUpdateSchema>;
 
 // Member profile
 export const memberProfileSchema = z.object({

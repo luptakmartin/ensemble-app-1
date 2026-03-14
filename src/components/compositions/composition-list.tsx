@@ -10,9 +10,11 @@ import { Link } from "@/lib/i18n/routing";
 export function CompositionList({
   compositions,
   canEdit,
+  attachmentCounts = {},
 }: {
   compositions: Composition[];
   canEdit: boolean;
+  attachmentCounts?: Record<string, number>;
 }) {
   const t = useTranslations("compositions");
 
@@ -40,6 +42,7 @@ export function CompositionList({
               key={composition.id}
               composition={composition}
               canEdit={canEdit}
+              attachmentCount={attachmentCounts[composition.id] ?? 0}
             />
           ))}
         </div>

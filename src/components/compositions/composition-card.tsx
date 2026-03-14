@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/lib/i18n/routing";
-import { Clock, User, MoreVertical } from "lucide-react";
+import { Clock, User, MoreVertical, Paperclip } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,9 +29,11 @@ import { toast } from "sonner";
 export function CompositionCard({
   composition,
   canEdit,
+  attachmentCount = 0,
 }: {
   composition: Composition;
   canEdit: boolean;
+  attachmentCount?: number;
 }) {
   const t = useTranslations();
   const router = useRouter();
@@ -100,6 +102,12 @@ export function CompositionCard({
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4" />
                   <span>{composition.duration}</span>
+                </div>
+              )}
+              {attachmentCount > 0 && (
+                <div className="flex items-center gap-2">
+                  <Paperclip className="h-4 w-4" />
+                  <span>{attachmentCount} {t("compositions.attachments").toLowerCase()}</span>
                 </div>
               )}
             </div>

@@ -238,6 +238,7 @@ Android must be first-class supported platform.
 -   No magic constants
 -   Explicit return types for exported functions
 -   Clean imports, no circular dependencies
+-   Codebase language(functions, variables, etc.) is strictly English
 
 ------------------------------------------------------------------------
 

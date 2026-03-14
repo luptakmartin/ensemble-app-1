@@ -256,3 +256,25 @@ CREATE POLICY "attachments_delete_director_admin" ON attachments
         AND get_member_roles(auth.uid(), c.ensemble_id) && ARRAY['director', 'admin']
     )
   );
+
+-- ============================================================
+-- Storage: attachments bucket
+-- ============================================================
+INSERT INTO storage.buckets (id, name, public)
+  VALUES ('attachments', 'attachments', true)
+  ON CONFLICT (id) DO NOTHING;
+
+CREATE POLICY "attachments_storage_select" ON storage.objects
+  FOR SELECT USING (bucket_id = 'attachments');
+
+CREATE POLICY "attachments_storage_insert" ON storage.objects
+  FOR INSERT WITH CHECK (
+    bucket_id = 'attachments'
+    AND auth.role() = 'authenticated'
+  );
+
+CREATE POLICY "attachments_storage_delete" ON storage.objects
+  FOR DELETE USING (
+    bucket_id = 'attachments'
+    AND auth.role() = 'authenticated'
+  );

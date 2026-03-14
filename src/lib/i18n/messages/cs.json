@@ -89,7 +89,9 @@
     "attachments": "Přílohy",
     "addToEvent": "Přidat k události",
     "removeFromEvent": "Odebrat z události",
-    "selectCompositions": "Vybrat skladby"
+    "selectCompositions": "Vybrat skladby",
+    "editAttachment": "Upravit přílohu",
+    "dropFilesHere": "Přetáhněte soubory sem"
   },
   "members": {
     "title": "Členové",
@@ -132,7 +134,8 @@
     "attachmentAdded": "Příloha přidána",
     "attachmentDeleted": "Příloha smazána",
     "compositionLinked": "Skladba přidána k události",
-    "compositionUnlinked": "Skladba odebrána z události"
+    "compositionUnlinked": "Skladba odebrána z události",
+    "attachmentUpdated": "Příloha aktualizována"
   },
   "error": {
     "title": "Něco se pokazilo",

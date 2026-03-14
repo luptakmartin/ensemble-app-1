@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { AttachmentList } from "../attachment-list";
 import type { Attachment } from "@/lib/db/repositories";
 
@@ -53,7 +53,7 @@ describe("AttachmentList", () => {
     expect(screen.getByText("Audio")).toBeInTheDocument();
   });
 
-  it("shows delete buttons when canEdit", () => {
+  it("shows edit and delete buttons when canEdit", () => {
     render(
       <AttachmentList
         attachments={[sheetAttachment]}
@@ -61,7 +61,37 @@ describe("AttachmentList", () => {
         canEdit={true}
       />
     );
-    expect(screen.getByRole("button")).toBeInTheDocument();
+    expect(screen.getByTestId("edit-attachment-button")).toBeInTheDocument();
+    expect(screen.getAllByRole("button").length).toBe(2);
+  });
+
+  it("shows inline edit form when edit button clicked", () => {
+    render(
+      <AttachmentList
+        attachments={[sheetAttachment]}
+        compositionId="comp-1"
+        canEdit={true}
+      />
+    );
+    fireEvent.click(screen.getByTestId("edit-attachment-button"));
+    expect(screen.getByTestId("edit-name-input")).toBeInTheDocument();
+    expect(screen.getByTestId("save-edit-button")).toBeInTheDocument();
+    expect(screen.getByTestId("cancel-edit-button")).toBeInTheDocument();
+  });
+
+  it("cancels edit when cancel button clicked", () => {
+    render(
+      <AttachmentList
+        attachments={[sheetAttachment]}
+        compositionId="comp-1"
+        canEdit={true}
+      />
+    );
+    fireEvent.click(screen.getByTestId("edit-attachment-button"));
+    expect(screen.getByTestId("edit-name-input")).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("cancel-edit-button"));
+    expect(screen.queryByTestId("edit-name-input")).not.toBeInTheDocument();
+    expect(screen.getByText("Sheet Music PDF")).toBeInTheDocument();
   });
 
   it("returns null when no attachments", () => {

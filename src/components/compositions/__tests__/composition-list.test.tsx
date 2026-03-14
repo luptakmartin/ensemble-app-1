@@ -54,4 +54,27 @@ describe("CompositionList", () => {
     render(<CompositionList compositions={[]} canEdit={false} />);
     expect(screen.queryByText("Create Composition")).not.toBeInTheDocument();
   });
+
+  it("shows attachment count when attachments exist", () => {
+    render(
+      <CompositionList
+        compositions={[mockComposition]}
+        canEdit={false}
+        attachmentCounts={{ "comp-1": 3 }}
+      />
+    );
+    expect(screen.getByText(/3 compositions\.attachments/)).toBeInTheDocument();
+  });
+
+  it("does not show attachment indicator when count is zero", () => {
+    render(
+      <CompositionList
+        compositions={[mockComposition]}
+        canEdit={false}
+        attachmentCounts={{ "comp-1": 0 }}
+      />
+    );
+    // The "attachments" text should not appear since count is 0
+    expect(screen.queryByText(/compositions\.attachments/i)).not.toBeInTheDocument();
+  });
 });
