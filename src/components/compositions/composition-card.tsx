@@ -22,18 +22,16 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import type { Composition } from "@/lib/db/repositories";
+import type { CompositionWithCount } from "./types";
 import { Link } from "@/lib/i18n/routing";
 import { toast } from "sonner";
 
 export function CompositionCard({
   composition,
   canEdit,
-  attachmentCount = 0,
 }: {
-  composition: Composition;
+  composition: CompositionWithCount;
   canEdit: boolean;
-  attachmentCount?: number;
 }) {
   const t = useTranslations();
   const router = useRouter();
@@ -104,12 +102,15 @@ export function CompositionCard({
                   <span>{composition.duration}</span>
                 </div>
               )}
-              {attachmentCount > 0 && (
-                <div className="flex items-center gap-2">
-                  <Paperclip className="h-4 w-4" />
-                  <span>{attachmentCount} {t("compositions.attachments").toLowerCase()}</span>
-                </div>
-              )}
+              <div
+                className={composition.attachmentCount > 0 ? "flex items-center gap-2" : "hidden"}
+                suppressHydrationWarning
+              >
+                <Paperclip className="h-4 w-4" />
+                <span suppressHydrationWarning>
+                  {composition.attachmentCount} {t("compositions.attachments").toLowerCase()}
+                </span>
+              </div>
             </div>
           </Link>
         </CardContent>

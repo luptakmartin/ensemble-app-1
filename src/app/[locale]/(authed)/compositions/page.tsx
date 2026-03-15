@@ -20,13 +20,24 @@ export default async function CompositionsPage() {
     compositions.map((c) => c.id)
   );
 
+  // Merge attachment counts into plain serializable objects for RSC boundary
+  const compositionsWithCounts = compositions.map((c) => ({
+    id: c.id,
+    ensembleId: c.ensembleId,
+    name: c.name,
+    author: c.author,
+    duration: c.duration,
+    createdAt: c.createdAt.toISOString(),
+    updatedAt: c.updatedAt.toISOString(),
+    attachmentCount: attachmentCounts[c.id] ?? 0,
+  }));
+
   return (
     <div className="p-4 md:p-6">
       <h1 className="text-2xl font-bold mb-4">{t("title")}</h1>
       <CompositionList
-        compositions={compositions}
+        compositions={compositionsWithCounts}
         canEdit={canEdit}
-        attachmentCounts={attachmentCounts}
       />
     </div>
   );

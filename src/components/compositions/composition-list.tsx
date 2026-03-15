@@ -4,17 +4,15 @@ import { useTranslations } from "next-intl";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CompositionCard } from "./composition-card";
-import type { Composition } from "@/lib/db/repositories";
+import type { CompositionWithCount } from "./types";
 import { Link } from "@/lib/i18n/routing";
 
 export function CompositionList({
   compositions,
   canEdit,
-  attachmentCounts = {},
 }: {
-  compositions: Composition[];
+  compositions: CompositionWithCount[];
   canEdit: boolean;
-  attachmentCounts?: Record<string, number>;
 }) {
   const t = useTranslations("compositions");
 
@@ -42,7 +40,6 @@ export function CompositionList({
               key={composition.id}
               composition={composition}
               canEdit={canEdit}
-              attachmentCount={attachmentCounts[composition.id] ?? 0}
             />
           ))}
         </div>

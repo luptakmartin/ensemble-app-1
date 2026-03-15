@@ -36,7 +36,7 @@ export class AttachmentRepository {
 
     const result: Record<string, number> = {};
     for (const row of rows) {
-      result[row.compositionId] = row.count;
+      result[row.compositionId] = Number(row.count);
     }
     return result;
   }

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { CompositionList } from "../composition-list";
-import type { Composition } from "@/lib/db/repositories";
+import type { CompositionWithCount } from "../types";
 
 vi.mock("next-intl", () => ({
   useTranslations: () => (key: string) => {
@@ -22,14 +22,15 @@ vi.mock("@/lib/i18n/routing", () => ({
   usePathname: () => "/compositions",
 }));
 
-const mockComposition: Composition = {
+const mockComposition: CompositionWithCount = {
   id: "comp-1",
   ensembleId: "ensemble-1",
   name: "Ave Maria",
   author: "Bach",
   duration: "4:30",
-  createdAt: new Date(),
-  updatedAt: new Date(),
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+  attachmentCount: 0,
 };
 
 describe("CompositionList", () => {
@@ -58,23 +59,22 @@ describe("CompositionList", () => {
   it("shows attachment count when attachments exist", () => {
     render(
       <CompositionList
-        compositions={[mockComposition]}
+        compositions={[{ ...mockComposition, attachmentCount: 3 }]}
         canEdit={false}
-        attachmentCounts={{ "comp-1": 3 }}
       />
     );
     expect(screen.getByText(/3 compositions\.attachments/)).toBeInTheDocument();
   });
 
-  it("does not show attachment indicator when count is zero", () => {
+  it("hides attachment indicator when count is zero", () => {
     render(
       <CompositionList
         compositions={[mockComposition]}
         canEdit={false}
-        attachmentCounts={{ "comp-1": 0 }}
       />
     );
-    // The "attachments" text should not appear since count is 0
-    expect(screen.queryByText(/compositions\.attachments/i)).not.toBeInTheDocument();
+    // The div is rendered but hidden via CSS class
+    const attachmentText = screen.getByText(/0 compositions\.attachments/);
+    expect(attachmentText.closest(".hidden")).toBeInTheDocument();
   });
 });

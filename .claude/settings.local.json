@@ -46,7 +46,12 @@
       "Bash(ls \"C:/Work/Development/ensemble-app-1/src/app/[locale]/\\(public\\)/\")",
       "mcp__supabase__apply_migration",
       "mcp__playwright__browser_fill_form",
-      "Bash(git status:*)"
+      "Bash(git status:*)",
+      "Bash(node:*)",
+      "Bash(git stash:*)",
+      "mcp__playwright__browser_console_messages",
+      "mcp__playwright__browser_close",
+      "mcp__playwright__browser_evaluate"
     ]
   },
   "enableAllProjectMcpServers": true,

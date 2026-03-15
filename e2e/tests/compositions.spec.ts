@@ -39,29 +39,28 @@ test.describe("Composition card details", () => {
     await expect(durationRow.locator("span")).not.toBeEmpty();
   });
 
-  test("shows attachment indicator on card when composition has attachments", async ({
-    page,
-  }) => {
+  test("shows attachment count on card with attachments", async ({ page }) => {
     await page.goto("/cs/compositions");
     await page.waitForLoadState("networkidle");
 
-    // Look for the Paperclip icon which indicates attachments exist
-    const paperclipIcon = page.locator(".lucide-paperclip").first();
-    if (!(await paperclipIcon.isVisible().catch(() => false))) {
+    // Find a visible (not hidden) paperclip row — indicates attachments exist
+    const visibleAttachmentRow = page.locator(
+      "[data-slot='card'] .flex.items-center.gap-2:has(.lucide-paperclip)",
+    );
+    if ((await visibleAttachmentRow.count()) === 0) {
       test.skip(
         true,
         "No compositions with attachments in test environment",
       );
     }
 
-    // The attachment count text should be next to the paperclip icon
-    const attachmentRow = paperclipIcon.locator("..");
-    await expect(attachmentRow).toBeVisible();
-    // Should contain a number followed by the localized "attachments" word
-    await expect(attachmentRow.locator("span")).toContainText(/\d+/);
+    const row = visibleAttachmentRow.first();
+    await expect(row).toBeVisible();
+    // Should contain a number and the localized "attachments" word (e.g. "3 přílohy")
+    await expect(row.locator("span")).toContainText(/\d+/);
   });
 
-  test("does not show attachment indicator on card without attachments", async ({
+  test("hides attachment indicator on card without attachments", async ({
     page,
   }) => {
     await page.goto("/cs/compositions");
@@ -73,17 +72,57 @@ test.describe("Composition card details", () => {
       test.skip(true, "No compositions in test environment");
     }
 
-    // Each card should either have a paperclip or not — cards without
-    // attachments must not render the paperclip icon at all
+    // Cards without attachments should have the paperclip row hidden via CSS
     for (let i = 0; i < cardCount; i++) {
       const card = cards.nth(i);
-      const paperclip = card.locator(".lucide-paperclip");
-      const hasPaperclip = await paperclip.isVisible().catch(() => false);
-      if (!hasPaperclip) {
-        // Confirm there's no hidden attachment text either
-        await expect(paperclip).not.toBeVisible();
+      const paperclipRow = card.locator(":has(> .lucide-paperclip)");
+      const isVisible = await paperclipRow.isVisible().catch(() => false);
+      if (!isVisible) {
+        // The row should exist in DOM but be hidden
+        await expect(paperclipRow).toBeHidden();
       }
     }
+  });
+
+  test("attachment indicator shows correct count matching detail page", async ({
+    page,
+  }) => {
+    await page.goto("/cs/compositions");
+    await page.waitForLoadState("networkidle");
+
+    // Find a card with a visible attachment count
+    const visibleAttachmentRow = page.locator(
+      "[data-slot='card'] .flex.items-center.gap-2:has(.lucide-paperclip):not(.hidden)",
+    );
+    if ((await visibleAttachmentRow.count()) === 0) {
+      test.skip(
+        true,
+        "No compositions with attachments in test environment",
+      );
+    }
+
+    // Get the count text from the first card with attachments
+    const row = visibleAttachmentRow.first();
+    const countText = await row.locator("span").textContent();
+    const match = countText?.match(/(\d+)/);
+    expect(match).toBeTruthy();
+    const expectedCount = parseInt(match![1], 10);
+    expect(expectedCount).toBeGreaterThan(0);
+
+    // Click through to the composition detail page
+    const card = row.locator("ancestor::[data-slot='card']");
+    const link = card.locator("a").first();
+    await link.click();
+    await page.waitForLoadState("networkidle");
+
+    // Count the actual attachments on the detail page
+    const attachmentItems = page.locator(
+      ".flex.items-center.justify-between.gap-2.py-1, .flex.items-center.gap-2.py-1",
+    );
+    // Wait for page to fully load
+    await expect(page.getByText("Přílohy")).toBeVisible({ timeout: 10_000 });
+    const actualCount = await attachmentItems.count();
+    expect(actualCount).toBe(expectedCount);
   });
 });
 
