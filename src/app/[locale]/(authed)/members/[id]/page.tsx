@@ -5,8 +5,11 @@ import { MemberRepository } from "@/lib/db/repositories";
 import { hasRole } from "@/lib/auth/roles";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { AvatarDisplay } from "@/components/ui/avatar-display";
 import { RoleManager } from "@/components/members/role-manager";
 import { VoiceGroupEditor } from "@/components/members/voice-group-editor";
+import { AdminMemberEditor } from "@/components/members/admin-member-editor";
+import { SetPasswordForm } from "@/components/members/set-password-form";
 import { Link } from "@/lib/i18n/routing";
 import { ArrowLeft } from "lucide-react";
 
@@ -39,12 +42,19 @@ export default async function MemberDetailPage({ params }: PageParams) {
       </Link>
 
       <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold">{member.name}</h1>
-          <p className="text-muted-foreground">{member.email}</p>
-          {member.phone && (
-            <p className="text-muted-foreground">{member.phone}</p>
-          )}
+        <div className="flex items-center gap-4">
+          <AvatarDisplay
+            name={member.name}
+            imageUrl={member.profilePicture}
+            size="lg"
+          />
+          <div>
+            <h1 className="text-2xl font-bold">{member.name}</h1>
+            <p className="text-muted-foreground">{member.email}</p>
+            {member.phone && (
+              <p className="text-muted-foreground">{member.phone}</p>
+            )}
+          </div>
         </div>
 
         <div className="flex flex-wrap gap-2">
@@ -60,7 +70,7 @@ export default async function MemberDetailPage({ params }: PageParams) {
           ))}
         </div>
 
-        {isDirectorOrAdmin && (
+        {isDirectorOrAdmin && !isAdmin && (
           <>
             <Separator />
             <VoiceGroupEditor
@@ -73,11 +83,25 @@ export default async function MemberDetailPage({ params }: PageParams) {
         {isAdmin && (
           <>
             <Separator />
+            <AdminMemberEditor member={member} />
+          </>
+        )}
+
+        {isAdmin && (
+          <>
+            <Separator />
             <RoleManager
               memberId={member.id}
               currentRoles={member.roles}
               isSelf={isSelf}
             />
+          </>
+        )}
+
+        {isAdmin && !isSelf && (
+          <>
+            <Separator />
+            <SetPasswordForm memberId={member.id} />
           </>
         )}
       </div>

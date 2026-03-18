@@ -88,6 +88,12 @@ export const changePasswordSchema = z.object({
 });
 export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
 
+// Set password (admin)
+export const setPasswordSchema = z.object({
+  newPassword: z.string().min(8),
+});
+export type SetPasswordInput = z.infer<typeof setPasswordSchema>;
+
 // Member roles
 export const memberRolesSchema = z.object({
   roles: z.array(z.enum(["admin", "director", "member"])).min(1),

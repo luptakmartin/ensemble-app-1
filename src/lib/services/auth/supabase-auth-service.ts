@@ -90,4 +90,15 @@ export class SupabaseAuthService implements AuthService {
       email: data.user.email,
     };
   }
+
+  async setUserPassword(userId: string, newPassword: string): Promise<void> {
+    const adminClient = createAdminClient();
+    const { error } = await adminClient.auth.admin.updateUserById(userId, {
+      password: newPassword,
+    });
+
+    if (error) {
+      throw new Error(error.message);
+    }
+  }
 }

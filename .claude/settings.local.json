@@ -51,7 +51,15 @@
       "Bash(git stash:*)",
       "mcp__playwright__browser_console_messages",
       "mcp__playwright__browser_close",
-      "mcp__playwright__browser_evaluate"
+      "mcp__playwright__browser_evaluate",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(cd:*)",
+      "Bash(git checkout:*)",
+      "Bash(cat:*)",
+      "Bash(rm -rf .next)",
+      "Bash(rm -rf node_modules/.cache)",
+      "Bash(taskkill //F //IM node.exe)"
     ]
   },
   "enableAllProjectMcpServers": true,

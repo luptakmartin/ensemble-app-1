@@ -8,6 +8,7 @@ export type Attendance = typeof eventAttendance.$inferSelect;
 export type AttendanceWithMember = Attendance & {
   memberName: string;
   voiceGroup: "S" | "A" | "T" | "B" | null;
+  profilePicture: string | null;
 };
 
 export class AttendanceRepository extends BaseRepository {
@@ -22,6 +23,7 @@ export class AttendanceRepository extends BaseRepository {
         updatedAt: eventAttendance.updatedAt,
         memberName: members.name,
         voiceGroup: members.voiceGroup,
+        profilePicture: members.profilePicture,
       })
       .from(eventAttendance)
       .innerJoin(members, eq(members.id, eventAttendance.memberId))

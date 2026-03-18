@@ -128,7 +128,8 @@
       "T": "Tenor",
       "B": "Bass"
     },
-    "allGroups": "All"
+    "allGroups": "All",
+    "setPassword": "Set Password"
   },
   "toast": {
     "saveSuccess": "Saved successfully",

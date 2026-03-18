@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { AvatarDisplay } from "@/components/ui/avatar-display";
 import { Link } from "@/lib/i18n/routing";
 import type { Member } from "@/lib/db/repositories";
 
@@ -12,7 +13,12 @@ export function MemberCard({ member }: { member: Member }) {
   return (
     <Card>
       <CardHeader className="pb-2">
-        <Link href={`/members/${member.id}`}>
+        <Link href={`/members/${member.id}`} className="flex items-center gap-3">
+          <AvatarDisplay
+            name={member.name}
+            imageUrl={member.profilePicture}
+            size="md"
+          />
           <CardTitle className="text-lg hover:underline">
             {member.name}
           </CardTitle>

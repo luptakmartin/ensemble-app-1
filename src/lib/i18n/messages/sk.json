@@ -128,7 +128,8 @@
       "T": "Tenor",
       "B": "Bas"
     },
-    "allGroups": "Všetky"
+    "allGroups": "Všetky",
+    "setPassword": "Nastaviť heslo"
   },
   "toast": {
     "saveSuccess": "Úspešne uložené",

@@ -66,8 +66,9 @@ describe("CompositionCard", () => {
         canEdit={false}
       />
     );
-    const attachmentText = screen.getByText("0 compositions.attachments");
-    expect(attachmentText.parentElement).toHaveClass("hidden");
+    expect(
+      screen.queryByText(/compositions\.attachments/)
+    ).not.toBeInTheDocument();
   });
 
   it("shows dropdown menu when canEdit", () => {

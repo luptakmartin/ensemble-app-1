@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { PresenceButton } from "./presence-button";
 import { Badge } from "@/components/ui/badge";
+import { AvatarDisplay } from "@/components/ui/avatar-display";
 import type { AttendanceWithMember } from "@/lib/db/repositories";
 
 type PresenceStatus = "yes" | "maybe" | "no" | "unset";
@@ -74,6 +75,11 @@ export function AttendanceDetail({
                   >
                     <div>
                       <div className="flex items-center gap-2">
+                        <AvatarDisplay
+                          name={a.memberName}
+                          imageUrl={a.profilePicture}
+                          size="sm"
+                        />
                         <span className={isSelf ? "font-semibold" : ""}>
                           {a.memberName}
                         </span>

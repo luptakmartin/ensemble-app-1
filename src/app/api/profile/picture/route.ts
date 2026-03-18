@@ -38,3 +38,26 @@ export async function PUT(request: NextRequest) {
 
   return NextResponse.json(member);
 }
+
+export async function DELETE() {
+  const session = await getSessionContext();
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  if (session.member.profilePicture) {
+    const storageService = await getStorageService();
+    try {
+      await storageService.delete("attachments", [session.member.profilePicture]);
+    } catch {
+      // Ignore deletion errors
+    }
+  }
+
+  const repo = new MemberRepository(session.ensembleId);
+  const member = await repo.update(session.member.id, {
+    profilePicture: null,
+  });
+
+  return NextResponse.json(member);
+}

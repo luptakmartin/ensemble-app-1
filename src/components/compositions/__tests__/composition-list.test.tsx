@@ -73,8 +73,8 @@ describe("CompositionList", () => {
         canEdit={false}
       />
     );
-    // The div is rendered but hidden via CSS class
-    const attachmentText = screen.getByText(/0 compositions\.attachments/);
-    expect(attachmentText.closest(".hidden")).toBeInTheDocument();
+    expect(
+      screen.queryByText(/compositions\.attachments/)
+    ).not.toBeInTheDocument();
   });
 });
