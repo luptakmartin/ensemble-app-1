@@ -242,22 +242,22 @@ describe("PUT /api/events/[id]/attendance", () => {
     expect(mockUpsert).toHaveBeenCalledWith("event-1", "member-2", "yes", "Late");
   });
 
-  it("PUT ignores note when editing another member", async () => {
+  it("PUT allows admin to set note when editing another member", async () => {
     mockGetSessionContext.mockResolvedValue(adminSession as never);
     mockFindById.mockResolvedValue(mockEvent);
     mockHasEventStarted.mockReturnValue(false);
-    mockUpsert.mockResolvedValue({ memberId: "a0000000-0000-4000-a000-000000000099", status: "no" });
+    mockUpsert.mockResolvedValue({ memberId: "a0000000-0000-4000-a000-000000000099", status: "no", note: "admin note" });
 
     const response = await PUT(
       makeRequest("http://localhost/api/events/event-1/attendance", {
         method: "PUT",
-        body: JSON.stringify({ status: "no", memberId: "a0000000-0000-4000-a000-000000000099", note: "should be ignored" }),
+        body: JSON.stringify({ status: "no", memberId: "a0000000-0000-4000-a000-000000000099", note: "admin note" }),
         headers: { "Content-Type": "application/json" },
       }),
       makeParams("event-1")
     );
     expect(response.status).toBe(200);
-    expect(mockUpsert).toHaveBeenCalledWith("event-1", "a0000000-0000-4000-a000-000000000099", "no", undefined);
+    expect(mockUpsert).toHaveBeenCalledWith("event-1", "a0000000-0000-4000-a000-000000000099", "no", "admin note");
   });
 
   it("PUT with null note deletes note", async () => {

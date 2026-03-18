@@ -3,8 +3,9 @@ import type { UserRole } from "@/lib/db/repositories";
 export interface NavItem {
   href: string;
   labelKey: string;
-  iconName: "calendar" | "music" | "users" | "user";
+  iconName: "calendar" | "music" | "users" | "user" | "bar-chart-3";
   requiredRoles?: UserRole[];
+  desktopOnly?: boolean;
 }
 
 export const navItems: NavItem[] = [
@@ -23,6 +24,13 @@ export const navItems: NavItem[] = [
     labelKey: "members.title",
     iconName: "users",
     requiredRoles: ["admin", "director"],
+  },
+  {
+    href: "/statistics",
+    labelKey: "statistics.title",
+    iconName: "bar-chart-3",
+    requiredRoles: ["admin", "director"],
+    desktopOnly: true,
   },
   {
     href: "/profile",

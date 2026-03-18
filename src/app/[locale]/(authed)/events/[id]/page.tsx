@@ -27,6 +27,7 @@ export default async function EventDetailPage({
   const isDirectorOrAdmin = hasRole(session.member.roles, ["admin", "director"]);
 
   const attendanceRepo = new AttendanceRepository(session.ensembleId);
+  await attendanceRepo.bulkCreateForEvent(event.id);
   const attendance = await attendanceRepo.findByEvent(event.id);
 
   const compositionRepo = new CompositionRepository(session.ensembleId);

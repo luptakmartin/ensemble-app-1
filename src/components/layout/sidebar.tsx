@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { usePathname, Link } from "@/lib/i18n/routing";
-import { Calendar, Music, Users, User, LogOut } from "lucide-react";
+import { Calendar, Music, Users, User, LogOut, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getVisibleNavItems } from "./nav-items";
 import type { UserRole } from "@/lib/db/repositories";
@@ -12,6 +12,7 @@ const iconMap = {
   music: Music,
   users: Users,
   user: User,
+  "bar-chart-3": BarChart3,
 } as const;
 
 interface SidebarProps {

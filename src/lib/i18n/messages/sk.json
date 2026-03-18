@@ -152,6 +152,14 @@
     "title": "Niečo sa pokazilo",
     "tryAgain": "Skúsiť znova"
   },
+  "statistics": {
+    "title": "Štatistiky",
+    "dateFrom": "Od",
+    "dateTo": "Do",
+    "noData": "Žiadne dáta pre zvolené obdobie.",
+    "notePopupTitle": "Poznámka k dochádzke",
+    "export": "Export"
+  },
   "profile": {
     "title": "Profil",
     "name": "Meno",

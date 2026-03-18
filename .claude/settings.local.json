@@ -59,7 +59,10 @@
       "Bash(cat:*)",
       "Bash(rm -rf .next)",
       "Bash(rm -rf node_modules/.cache)",
-      "Bash(taskkill //F //IM node.exe)"
+      "Bash(taskkill //F //IM node.exe)",
+      "Bash(find /c/Work/Development/ensemble-app-1/src/app/[locale]/\\\\\\(authed\\\\\\) -name \"page.tsx\")",
+      "Bash(grep:*)",
+      "Bash(npm ls:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

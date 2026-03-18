@@ -1,4 +1,4 @@
-const CACHE_NAME = "ensemble-v1";
+const CACHE_NAME = "ensemble-v2";
 const STATIC_ASSETS = ["/icons/icon-192x192.png", "/icons/icon-512x512.png"];
 
 self.addEventListener("install", (event) => {
@@ -25,11 +25,22 @@ self.addEventListener("fetch", (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Cache-first for static assets and icons
-  if (
-    url.pathname.startsWith("/_next/static/") ||
-    url.pathname.startsWith("/icons/")
-  ) {
+  // Network-first for Next.js static assets (prevents stale bundles after rebuilds)
+  if (url.pathname.startsWith("/_next/static/")) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+          return response;
+        })
+        .catch(() => caches.match(request).then((cached) => cached || fetch(request)))
+    );
+    return;
+  }
+
+  // Cache-first for icons
+  if (url.pathname.startsWith("/icons/")) {
     event.respondWith(
       caches.match(request).then(
         (cached) =>

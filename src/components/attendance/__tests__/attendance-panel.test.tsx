@@ -30,6 +30,7 @@ const mockAttendance: AttendanceWithMember[] = [
     updatedAt: new Date(),
     memberName: "Alice",
     voiceGroup: "S",
+    profilePicture: null,
   },
   {
     id: "att-2",
@@ -40,6 +41,7 @@ const mockAttendance: AttendanceWithMember[] = [
     updatedAt: new Date(),
     memberName: "Bob",
     voiceGroup: "T",
+    profilePicture: null,
   },
 ];
 

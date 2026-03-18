@@ -100,6 +100,7 @@ export function AttendanceDetail({
                       <PresenceButton
                         status={a.status}
                         onStatusChange={(s) => onStatusChange(a.memberId, s)}
+                        compact
                       />
                     )}
                   </div>

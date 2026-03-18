@@ -109,6 +109,34 @@ export class AttendanceRepository extends BaseRepository {
     return this.upsert(eventId, memberId, undefined, note);
   }
 
+  async findByEvents(eventIds: string[]): Promise<AttendanceWithMember[]> {
+    if (eventIds.length === 0) return [];
+
+    const rows = await this.db
+      .select({
+        id: eventAttendance.id,
+        eventId: eventAttendance.eventId,
+        memberId: eventAttendance.memberId,
+        status: eventAttendance.status,
+        note: eventAttendance.note,
+        updatedAt: eventAttendance.updatedAt,
+        memberName: members.name,
+        voiceGroup: members.voiceGroup,
+        profilePicture: members.profilePicture,
+      })
+      .from(eventAttendance)
+      .innerJoin(members, eq(members.id, eventAttendance.memberId))
+      .where(
+        and(
+          inArray(eventAttendance.eventId, eventIds),
+          eq(members.ensembleId, this.ensembleId)
+        )
+      )
+      .orderBy(asc(members.name));
+
+    return rows;
+  }
+
   async findByMemberForEvents(
     memberId: string,
     eventIds: string[]

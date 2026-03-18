@@ -11,11 +11,13 @@ export function PresenceNote({
   note,
   onNoteChange,
   disabled,
+  memberId,
 }: {
   eventId: string;
   note: string | null;
   onNoteChange: (note: string | null) => void;
   disabled?: boolean;
+  memberId?: string;
 }) {
   const t = useTranslations("presence");
   const tCommon = useTranslations("common");
@@ -28,10 +30,12 @@ export function PresenceNote({
     const newNote = trimmed || null;
     setSaving(true);
     try {
+      const body: Record<string, unknown> = { note: newNote };
+      if (memberId) body.memberId = memberId;
       const res = await fetch(`/api/events/${eventId}/attendance`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ note: newNote }),
+        body: JSON.stringify(body),
       });
       if (res.ok) {
         onNoteChange(newNote);
@@ -47,10 +51,12 @@ export function PresenceNote({
   const handleDelete = async () => {
     setSaving(true);
     try {
+      const body: Record<string, unknown> = { note: null };
+      if (memberId) body.memberId = memberId;
       const res = await fetch(`/api/events/${eventId}/attendance`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ note: null }),
+        body: JSON.stringify(body),
       });
       if (res.ok) {
         onNoteChange(null);

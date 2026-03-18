@@ -152,6 +152,14 @@
     "title": "Something went wrong",
     "tryAgain": "Try again"
   },
+  "statistics": {
+    "title": "Statistics",
+    "dateFrom": "From",
+    "dateTo": "To",
+    "noData": "No data for the selected period.",
+    "notePopupTitle": "Attendance Note",
+    "export": "Export"
+  },
   "profile": {
     "title": "Profile",
     "name": "Name",

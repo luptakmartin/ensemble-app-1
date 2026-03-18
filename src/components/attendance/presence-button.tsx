@@ -18,15 +18,17 @@ export function PresenceButton({
   status,
   onStatusChange,
   disabled,
+  compact,
 }: {
   status: PresenceStatus;
   onStatusChange: (status: PresenceStatus) => void;
   disabled?: boolean;
+  compact?: boolean;
 }) {
   const t = useTranslations("presence");
 
   return (
-    <div className="flex gap-1">
+    <div className="flex flex-wrap gap-1">
       {statusConfig.map(({ status: s, Icon, activeClass }) => (
         <Button
           key={s}
@@ -35,13 +37,13 @@ export function PresenceButton({
           disabled={disabled}
           aria-label={t(s)}
           className={cn(
-            "h-8 px-3",
+            compact ? "h-8 w-8 p-0" : "h-8 px-3",
             status === s && activeClass
           )}
           onClick={() => onStatusChange(s)}
         >
-          <Icon className="h-4 w-4 mr-1" />
-          {t(s)}
+          <Icon className={cn("h-4 w-4", !compact && "mr-1")} />
+          {!compact && t(s)}
         </Button>
       ))}
     </div>

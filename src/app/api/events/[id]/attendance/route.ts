@@ -77,8 +77,8 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // When editing another member, ignore note field (only self can set notes)
-    const note = isSelf ? data.note : undefined;
+    // Admin/director can set notes for any member, members only for themselves
+    const note = (isSelf || isDirectorOrAdmin) ? data.note : undefined;
 
     const attendanceRepo = new AttendanceRepository(session.ensembleId);
     const result = await attendanceRepo.upsert(id, targetMemberId, data.status, note);

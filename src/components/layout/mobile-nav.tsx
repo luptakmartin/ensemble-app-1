@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { usePathname, Link } from "@/lib/i18n/routing";
-import { Calendar, Music, Users, User } from "lucide-react";
+import { Calendar, Music, Users, User, BarChart3 } from "lucide-react";
 import { getVisibleNavItems } from "./nav-items";
 import type { UserRole } from "@/lib/db/repositories";
 
@@ -11,6 +11,7 @@ const iconMap = {
   music: Music,
   users: Users,
   user: User,
+  "bar-chart-3": BarChart3,
 } as const;
 
 interface MobileNavProps {
@@ -20,7 +21,7 @@ interface MobileNavProps {
 export function MobileNav({ roles }: MobileNavProps) {
   const t = useTranslations();
   const pathname = usePathname();
-  const items = getVisibleNavItems(roles);
+  const items = getVisibleNavItems(roles).filter((item) => !item.desktopOnly);
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background md:hidden">

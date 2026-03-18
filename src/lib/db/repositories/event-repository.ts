@@ -94,6 +94,18 @@ export class EventRepository extends BaseRepository {
     return updated;
   }
 
+  async findByDateRange(from?: Date, to?: Date): Promise<Event[]> {
+    const conditions = [eq(events.ensembleId, this.ensembleId)];
+    if (from) conditions.push(gte(events.date, from));
+    if (to) conditions.push(lt(events.date, to));
+
+    return this.db
+      .select()
+      .from(events)
+      .where(and(...conditions))
+      .orderBy(asc(events.date), asc(events.time));
+  }
+
   async delete(id: string): Promise<void> {
     await this.db
       .delete(events)
