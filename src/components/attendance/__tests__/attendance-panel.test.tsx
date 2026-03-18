@@ -1,12 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 
 vi.mock("next-intl", () => ({
   useTranslations: () => (key: string) => {
     const map: Record<string, string> = {
       title: "Attendance",
-      yourStatus: "Your attendance",
-      eventStarted: "Event has already started",
       summary: "Summary",
       detail: "Detail",
       yes: "Yes",
@@ -19,25 +17,8 @@ vi.mock("next-intl", () => ({
   },
 }));
 
-vi.mock("@/lib/utils/event-time", () => ({
-  hasEventStarted: vi.fn(() => false),
-}));
-
 import { AttendancePanel } from "../attendance-panel";
-import type { Event, AttendanceWithMember } from "@/lib/db/repositories";
-
-const mockEvent: Event = {
-  id: "event-1",
-  ensembleId: "ensemble-1",
-  name: "Test Event",
-  type: "concert",
-  date: new Date("2026-04-01T00:00:00Z"),
-  time: "18:00",
-  place: "Hall",
-  description: null,
-  createdAt: new Date(),
-  updatedAt: new Date(),
-};
+import type { AttendanceWithMember } from "@/lib/db/repositories";
 
 const mockAttendance: AttendanceWithMember[] = [
   {
@@ -45,6 +26,7 @@ const mockAttendance: AttendanceWithMember[] = [
     eventId: "event-1",
     memberId: "member-1",
     status: "unset",
+    note: null,
     updatedAt: new Date(),
     memberName: "Alice",
     voiceGroup: "S",
@@ -54,6 +36,7 @@ const mockAttendance: AttendanceWithMember[] = [
     eventId: "event-1",
     memberId: "member-2",
     status: "yes",
+    note: null,
     updatedAt: new Date(),
     memberName: "Bob",
     voiceGroup: "T",
@@ -61,61 +44,52 @@ const mockAttendance: AttendanceWithMember[] = [
 ];
 
 describe("AttendancePanel", () => {
+  const mockOnStatusChange = vi.fn();
+
   beforeEach(() => {
     vi.clearAllMocks();
-    global.fetch = vi.fn().mockResolvedValue({ ok: true });
   });
 
   it("renders summary and detail tabs", () => {
     render(
       <AttendancePanel
-        event={mockEvent}
         attendance={mockAttendance}
         currentMemberId="member-1"
         isAdmin={false}
         isDirectorOrAdmin={false}
+        eventStarted={false}
+        onStatusChange={mockOnStatusChange}
       />
     );
     expect(screen.getByText("Summary")).toBeInTheDocument();
     expect(screen.getByText("Detail")).toBeInTheDocument();
   });
 
-  it("shows current user's presence button at top", () => {
+  it("renders attendance heading", () => {
     render(
       <AttendancePanel
-        event={mockEvent}
         attendance={mockAttendance}
         currentMemberId="member-1"
         isAdmin={false}
         isDirectorOrAdmin={false}
+        eventStarted={false}
+        onStatusChange={mockOnStatusChange}
       />
     );
-    expect(screen.getByText("Your attendance")).toBeInTheDocument();
+    expect(screen.getByText("Attendance")).toBeInTheDocument();
   });
 
-  it("calls API on status change", async () => {
+  it("does not render 'Your Status' section (moved to RsvpSection)", () => {
     render(
       <AttendancePanel
-        event={mockEvent}
         attendance={mockAttendance}
         currentMemberId="member-1"
         isAdmin={false}
         isDirectorOrAdmin={false}
+        eventStarted={false}
+        onStatusChange={mockOnStatusChange}
       />
     );
-
-    // Click the "Yes" button (first one in the top presence row)
-    const yesButtons = screen.getAllByLabelText("Yes");
-    fireEvent.click(yesButtons[0]);
-
-    await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith(
-        "/api/events/event-1/attendance",
-        expect.objectContaining({
-          method: "PUT",
-          body: JSON.stringify({ status: "yes" }),
-        })
-      );
-    });
+    expect(screen.queryByText("Your attendance")).not.toBeInTheDocument();
   });
 });

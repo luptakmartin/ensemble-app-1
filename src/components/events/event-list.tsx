@@ -10,6 +10,10 @@ import { EventCalendar } from "./event-calendar";
 import type { Event } from "@/lib/db/repositories";
 import { Link } from "@/lib/i18n/routing";
 
+type PresenceStatus = "yes" | "maybe" | "no" | "unset";
+
+type UserAttendanceMap = Record<string, { status: PresenceStatus; note: string | null }>;
+
 type ViewMode = "cards" | "calendar";
 
 export function EventList({
@@ -17,14 +21,34 @@ export function EventList({
   pastEvents,
   allEvents,
   canEdit,
+  userAttendanceMap,
+  currentMemberId,
+  compositionCountMap,
 }: {
   upcomingEvents: Event[];
   pastEvents: Event[];
   allEvents: Event[];
   canEdit: boolean;
+  userAttendanceMap?: UserAttendanceMap;
+  currentMemberId?: string;
+  compositionCountMap?: Record<string, number>;
 }) {
   const t = useTranslations("events");
   const [view, setView] = useState<ViewMode>("cards");
+
+  const renderCard = (event: Event) => {
+    const attendance = userAttendanceMap?.[event.id];
+    return (
+      <EventCard
+        key={event.id}
+        event={event}
+        canEdit={canEdit}
+        userStatus={attendance?.status}
+        userNote={attendance?.note}
+        compositionCount={compositionCountMap?.[event.id]}
+      />
+    );
+  };
 
   return (
     <div className="space-y-4">
@@ -61,7 +85,7 @@ export function EventList({
       </div>
 
       {view === "calendar" ? (
-        <EventCalendar events={allEvents} canEdit={canEdit} />
+        <EventCalendar events={allEvents} canEdit={canEdit} currentMemberId={currentMemberId} />
       ) : (
         <Tabs defaultValue="upcoming">
           <TabsList>
@@ -76,9 +100,7 @@ export function EventList({
               </p>
             ) : (
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {upcomingEvents.map((event) => (
-                  <EventCard key={event.id} event={event} canEdit={canEdit} />
-                ))}
+                {upcomingEvents.map(renderCard)}
               </div>
             )}
           </TabsContent>
@@ -90,9 +112,7 @@ export function EventList({
               </p>
             ) : (
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {pastEvents.map((event) => (
-                  <EventCard key={event.id} event={event} canEdit={canEdit} />
-                ))}
+                {pastEvents.map(renderCard)}
               </div>
             )}
           </TabsContent>

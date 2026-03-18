@@ -139,3 +139,24 @@ test.describe("Compositions page (member role)", () => {
     ).not.toBeVisible();
   });
 });
+
+test.describe("Compositions hydration check", () => {
+  test.use({ storageState: "./e2e/.auth/admin.json" });
+
+  test("no hydration errors on compositions page", async ({ page }) => {
+    const consoleErrors: string[] = [];
+    page.on("console", (msg) => {
+      if (msg.type() === "error" && msg.text().toLowerCase().includes("hydration")) {
+        consoleErrors.push(msg.text());
+      }
+    });
+
+    await page.goto("/cs/compositions");
+    await page.waitForLoadState("networkidle");
+
+    // Wait a moment for any delayed hydration errors
+    await page.waitForTimeout(2000);
+
+    expect(consoleErrors).toHaveLength(0);
+  });
+});

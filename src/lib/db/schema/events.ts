@@ -26,6 +26,7 @@ export const events = pgTable("events", {
   type: eventTypeEnum("type").notNull(),
   date: timestamp("date", { withTimezone: true }).notNull(),
   time: varchar("time", { length: 10 }).notNull(),
+  timeTo: varchar("time_to", { length: 10 }),
   place: varchar("place", { length: 255 }).notNull(),
   description: text("description"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
@@ -41,6 +42,7 @@ export const eventAttendance = pgTable("event_attendance", {
     .notNull()
     .references(() => members.id, { onDelete: "cascade" }),
   status: presenceStatusEnum("status").notNull().default("unset"),
+  note: text("note"),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 }, (table) => [
   unique("event_attendance_event_member_unique").on(table.eventId, table.memberId),

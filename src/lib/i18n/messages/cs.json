@@ -37,6 +37,9 @@
     "type": "Typ",
     "date": "Datum",
     "time": "Čas",
+    "timeFrom": "Od",
+    "timeTo": "Do",
+    "compositionsScheduled": "naplánovaných skladeb",
     "place": "Místo",
     "description": "Popis",
     "create": "Vytvořit událost",
@@ -66,7 +69,12 @@
     "detail": "Detail",
     "yourStatus": "Vaše docházka",
     "eventStarted": "Událost již začala",
-    "unassigned": "Nezařazení"
+    "unassigned": "Nezařazení",
+    "note": "Poznámka",
+    "addNote": "Přidat poznámku",
+    "editNote": "Upravit poznámku",
+    "deleteNote": "Smazat poznámku",
+    "notePlaceholder": "Napište poznámku..."
   },
   "compositions": {
     "title": "Skladby",
@@ -135,7 +143,9 @@
     "attachmentDeleted": "Příloha smazána",
     "compositionLinked": "Skladba přidána k události",
     "compositionUnlinked": "Skladba odebrána z události",
-    "attachmentUpdated": "Příloha aktualizována"
+    "attachmentUpdated": "Příloha aktualizována",
+    "noteSaved": "Poznámka uložena",
+    "noteDeleted": "Poznámka smazána"
   },
   "error": {
     "title": "Něco se pokazilo",

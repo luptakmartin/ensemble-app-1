@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import type { Locale } from "date-fns";
 import { cs, sk, enUS } from "date-fns/locale";
 import { Calendar, Clock, MapPin, ArrowLeft } from "lucide-react";
+import { formatTimeRange } from "@/lib/utils/format-time";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -87,7 +88,7 @@ export function EventDetail({
           </div>
           <div className="flex items-center gap-2">
             <Clock className="h-4 w-4" />
-            <span>{event.time}</span>
+            <span>{formatTimeRange(event.time, event.timeTo)}</span>
           </div>
           <div className="flex items-center gap-2">
             <MapPin className="h-4 w-4" />

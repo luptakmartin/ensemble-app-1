@@ -1,4 +1,4 @@
-import { eq, and, asc, inArray } from "drizzle-orm";
+import { eq, and, asc, inArray, count } from "drizzle-orm";
 import { BaseRepository } from "./base-repository";
 import { compositions, eventCompositions } from "@/lib/db/schema";
 
@@ -76,6 +76,67 @@ export class CompositionRepository extends BaseRepository {
         )
       )
       .orderBy(asc(compositions.name));
+  }
+
+  async countByEventIds(eventIds: string[]): Promise<Record<string, number>> {
+    if (eventIds.length === 0) return {};
+
+    const rows = await this.db
+      .select({
+        eventId: eventCompositions.eventId,
+        count: count(),
+      })
+      .from(eventCompositions)
+      .where(inArray(eventCompositions.eventId, eventIds))
+      .groupBy(eventCompositions.eventId);
+
+    const result: Record<string, number> = {};
+    for (const row of rows) {
+      result[row.eventId] = Number(row.count);
+    }
+    return result;
+  }
+
+  async findByEventIds(eventIds: string[]): Promise<Record<string, Composition[]>> {
+    if (eventIds.length === 0) return {};
+
+    const rows = await this.db
+      .select({
+        eventId: eventCompositions.eventId,
+        id: compositions.id,
+        ensembleId: compositions.ensembleId,
+        name: compositions.name,
+        author: compositions.author,
+        duration: compositions.duration,
+        createdAt: compositions.createdAt,
+        updatedAt: compositions.updatedAt,
+      })
+      .from(eventCompositions)
+      .innerJoin(compositions, eq(compositions.id, eventCompositions.compositionId))
+      .where(
+        and(
+          inArray(eventCompositions.eventId, eventIds),
+          eq(compositions.ensembleId, this.ensembleId)
+        )
+      )
+      .orderBy(asc(compositions.name));
+
+    const result: Record<string, Composition[]> = {};
+    for (const row of rows) {
+      if (!result[row.eventId]) {
+        result[row.eventId] = [];
+      }
+      result[row.eventId].push({
+        id: row.id,
+        ensembleId: row.ensembleId,
+        name: row.name,
+        author: row.author,
+        duration: row.duration,
+        createdAt: row.createdAt,
+        updatedAt: row.updatedAt,
+      });
+    }
+    return result;
   }
 
   async create(data: CreateCompositionData): Promise<Composition> {

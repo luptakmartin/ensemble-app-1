@@ -39,7 +39,10 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     const body = await request.json();
     const data = eventSchema.partial().parse(body);
     const repo = new EventRepository(session.ensembleId);
-    const event = await repo.update(id, data);
+    const event = await repo.update(id, {
+      ...data,
+      timeTo: data.timeTo === "" ? undefined : data.timeTo,
+    });
     return NextResponse.json(event);
   } catch (error) {
     if (error instanceof ZodError) {

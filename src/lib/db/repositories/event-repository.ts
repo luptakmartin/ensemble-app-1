@@ -10,6 +10,7 @@ export type CreateEventData = {
   type: Event["type"];
   date: Date | string;
   time: string;
+  timeTo?: string;
   place: string;
   description?: string;
 };

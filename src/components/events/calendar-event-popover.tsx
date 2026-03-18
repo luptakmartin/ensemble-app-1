@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { format } from "date-fns";
 import type { Locale } from "date-fns";
@@ -9,9 +9,11 @@ import { Calendar, Clock, MapPin } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EventTypeBadge } from "./event-type-badge";
 import { PresenceButton } from "@/components/attendance/presence-button";
+import { PresenceNote } from "@/components/attendance/presence-note";
 import type { Event } from "@/lib/db/repositories";
 import { Link } from "@/lib/i18n/routing";
 import { toast } from "sonner";
+import { formatTimeRange } from "@/lib/utils/format-time";
 
 type PresenceStatus = "yes" | "maybe" | "no" | "unset";
 
@@ -26,17 +28,21 @@ export function CalendarEventPopover({
   event,
   rect,
   onClose,
+  currentMemberId,
 }: {
   event: Event;
   rect: { x: number; y: number };
   onClose: () => void;
+  currentMemberId?: string;
 }) {
   const tPresence = useTranslations("presence");
   const tToast = useTranslations("toast");
   const locale = useLocale();
   const popoverRef = useRef<HTMLDivElement>(null);
   const [status, setStatus] = useState<PresenceStatus>("unset");
+  const [note, setNote] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [position, setPosition] = useState({ left: rect.x, top: rect.y });
 
   const formattedDate = format(
     new Date(event.date),
@@ -44,15 +50,60 @@ export function CalendarEventPopover({
     { locale: dateLocales[locale] || dateLocales.en }
   );
 
+  // Fetch attendance and find current user's record
   useEffect(() => {
     fetch(`/api/events/${event.id}/attendance`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.status) setStatus(data.status);
+        if (Array.isArray(data)) {
+          const myRecord = currentMemberId
+            ? data.find((a: { memberId: string }) => a.memberId === currentMemberId)
+            : null;
+          if (myRecord) {
+            setStatus(myRecord.status);
+            setNote(myRecord.note ?? null);
+          }
+        } else if (data.status) {
+          setStatus(data.status);
+          setNote(data.note ?? null);
+        }
       })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [event.id]);
+  }, [event.id, currentMemberId]);
+
+  // B2: Fix popover positioning
+  const adjustPosition = useCallback(() => {
+    if (!popoverRef.current) return;
+    const el = popoverRef.current;
+    const popoverRect = el.getBoundingClientRect();
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    let { left, top } = { left: rect.x, top: rect.y };
+
+    if (vw < 640) {
+      // Mobile: center horizontally
+      left = Math.max(8, (vw - popoverRect.width) / 2);
+      if (top + popoverRect.height > vh - 8) {
+        top = Math.max(8, vh - popoverRect.height - 8);
+      }
+    } else {
+      if (left + popoverRect.width > vw - 8) {
+        left = vw - popoverRect.width - 8;
+      }
+      if (top + popoverRect.height > vh - 8) {
+        top = rect.y - popoverRect.height - 4;
+      }
+    }
+
+    setPosition({ left: Math.max(8, left), top: Math.max(8, top) });
+  }, [rect.x, rect.y]);
+
+  useEffect(() => {
+    // Run after first render
+    requestAnimationFrame(adjustPosition);
+  }, [adjustPosition]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -90,10 +141,10 @@ export function CalendarEventPopover({
     <div
       ref={popoverRef}
       className="fixed z-50"
-      style={{ left: rect.x, top: rect.y }}
+      style={{ left: position.left, top: position.top }}
       data-testid="calendar-event-popover"
     >
-      <Card className="w-72 shadow-lg">
+      <Card className="w-80 shadow-lg">
         <CardHeader className="pb-2">
           <div className="flex items-start justify-between gap-2">
             <Link href={`/events/${event.id}`}>
@@ -112,7 +163,7 @@ export function CalendarEventPopover({
             </div>
             <div className="flex items-center gap-2">
               <Clock className="h-4 w-4" />
-              <span>{event.time}</span>
+              <span>{formatTimeRange(event.time, event.timeTo)}</span>
             </div>
             <div className="flex items-center gap-2">
               <MapPin className="h-4 w-4" />
@@ -126,6 +177,14 @@ export function CalendarEventPopover({
               onStatusChange={handleStatusChange}
               disabled={loading}
             />
+            <div className="mt-1">
+              <PresenceNote
+                eventId={event.id}
+                note={note}
+                onNoteChange={setNote}
+                disabled={loading}
+              />
+            </div>
           </div>
         </CardContent>
       </Card>

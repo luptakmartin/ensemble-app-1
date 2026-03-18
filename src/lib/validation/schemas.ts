@@ -19,6 +19,7 @@ export const eventSchema = z.object({
   ]),
   date: z.string().datetime(),
   time: z.string().regex(/^\d{2}:\d{2}$/),
+  timeTo: z.string().regex(/^\d{2}:\d{2}$/).optional().or(z.literal("")),
   place: z.string().min(1),
   description: z.string().optional(),
 });
@@ -31,9 +32,13 @@ export const attendanceSchema = z.object({
 export type AttendanceInput = z.infer<typeof attendanceSchema>;
 
 export const attendanceUpdateSchema = z.object({
-  status: z.enum(["yes", "maybe", "no", "unset"]),
+  status: z.enum(["yes", "maybe", "no", "unset"]).optional(),
+  note: z.string().max(500).nullable().optional(),
   memberId: z.string().uuid().optional(),
-});
+}).refine(
+  (data) => data.status !== undefined || data.note !== undefined,
+  { message: "At least one of status or note must be provided" }
+);
 
 // Compositions
 export const compositionSchema = z.object({

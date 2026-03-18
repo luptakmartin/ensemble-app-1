@@ -34,7 +34,10 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const data = eventSchema.parse(body);
     const repo = new EventRepository(session.ensembleId);
-    const event = await repo.create(data);
+    const event = await repo.create({
+      ...data,
+      timeTo: data.timeTo || undefined,
+    });
 
     const attendanceRepo = new AttendanceRepository(session.ensembleId);
     await attendanceRepo.bulkCreateForEvent(event.id);

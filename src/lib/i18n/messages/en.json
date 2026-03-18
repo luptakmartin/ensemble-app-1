@@ -37,6 +37,9 @@
     "type": "Type",
     "date": "Date",
     "time": "Time",
+    "timeFrom": "From",
+    "timeTo": "To",
+    "compositionsScheduled": "compositions scheduled",
     "place": "Place",
     "description": "Description",
     "create": "Create Event",
@@ -66,7 +69,12 @@
     "detail": "Detail",
     "yourStatus": "Your attendance",
     "eventStarted": "Event has already started",
-    "unassigned": "Unassigned"
+    "unassigned": "Unassigned",
+    "note": "Note",
+    "addNote": "Add note",
+    "editNote": "Edit note",
+    "deleteNote": "Delete note",
+    "notePlaceholder": "Write a note..."
   },
   "compositions": {
     "title": "Compositions",
@@ -135,7 +143,9 @@
     "attachmentDeleted": "Attachment deleted",
     "compositionLinked": "Composition linked to event",
     "compositionUnlinked": "Composition removed from event",
-    "attachmentUpdated": "Attachment updated"
+    "attachmentUpdated": "Attachment updated",
+    "noteSaved": "Note saved",
+    "noteDeleted": "Note deleted"
   },
   "error": {
     "title": "Something went wrong",

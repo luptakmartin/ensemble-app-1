@@ -4,6 +4,7 @@ import { MemberRepository } from "@/lib/db/repositories";
 import { Separator } from "@/components/ui/separator";
 import { ProfileForm } from "@/components/profile/profile-form";
 import { ChangePasswordForm } from "@/components/profile/change-password-form";
+import { LogoutButton } from "@/components/profile/logout-button";
 
 export default async function ProfilePage() {
   const session = await requireSession();
@@ -23,6 +24,8 @@ export default async function ProfilePage() {
         <ProfileForm member={member} />
         <Separator />
         <ChangePasswordForm />
+        <Separator />
+        <LogoutButton />
       </div>
     </div>
   );

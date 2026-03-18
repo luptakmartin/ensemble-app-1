@@ -72,16 +72,23 @@ export function AttendanceDetail({
                     key={a.memberId}
                     className="flex items-center justify-between py-1"
                   >
-                    <div className="flex items-center gap-2">
-                      <span className={isSelf ? "font-semibold" : ""}>
-                        {a.memberName}
-                      </span>
-                      <Badge
-                        variant="outline"
-                        className={statusBadgeVariant[a.status]}
-                      >
-                        {t(a.status)}
-                      </Badge>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className={isSelf ? "font-semibold" : ""}>
+                          {a.memberName}
+                        </span>
+                        <Badge
+                          variant="outline"
+                          className={statusBadgeVariant[a.status]}
+                        >
+                          {t(a.status)}
+                        </Badge>
+                      </div>
+                      {a.note && (
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                          {a.note}
+                        </p>
+                      )}
                     </div>
                     {canEdit && (
                       <PresenceButton

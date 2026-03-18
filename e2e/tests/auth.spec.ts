@@ -44,3 +44,34 @@ test.describe("Authentication", () => {
     await expect(page).toHaveURL(/\/cs\/login/);
   });
 });
+
+test.describe("Mobile logout via profile page", () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+
+  test("logs out from profile page on mobile", async ({ page }, testInfo) => {
+    test.skip(
+      testInfo.project.name === "chromium",
+      "this test is for mobile viewport only",
+    );
+
+    // First log in
+    await page.goto("/cs/login");
+    await page.getByLabel("E-mail").fill(testAccounts.member.email);
+    await page.getByLabel("Heslo").fill(testAccounts.member.password);
+    await page.getByRole("button", { name: "Přihlásit se" }).click();
+    await expect(page).toHaveURL(/\/cs\/events/);
+
+    // Navigate to profile via bottom nav
+    await page
+      .locator("nav.fixed.bottom-0")
+      .getByRole("link", { name: "Profil" })
+      .click();
+    await expect(page).toHaveURL(/\/cs\/profile/);
+
+    // Click logout button on profile page
+    await page.getByRole("button", { name: "Odhlásit se" }).click();
+
+    // Should redirect to login
+    await expect(page).toHaveURL(/\/cs\/login/);
+  });
+});

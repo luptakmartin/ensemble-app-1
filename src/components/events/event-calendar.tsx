@@ -21,9 +21,11 @@ const fcLocaleMap: Record<string, string> = {
 export function EventCalendar({
   events,
   canEdit,
+  currentMemberId,
 }: {
   events: Event[];
   canEdit: boolean;
+  currentMemberId?: string;
 }) {
   const locale = useLocale();
   const router = useRouter();
@@ -86,6 +88,7 @@ export function EventCalendar({
           event={popover.event}
           rect={popover.rect}
           onClose={handleClosePopover}
+          currentMemberId={currentMemberId}
         />
       )}
     </div>

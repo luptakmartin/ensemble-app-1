@@ -1,0 +1,12 @@
+- Section presence on event card should be collapsible under a button ["RSVP: " + ANSWER + down arrow]. Do not translate "RSVP", stays the same in all languages. ANSWER is a selected presence answer. Color keeps the presence incons schema.
+- Replace presence icons by buttons (Yes, Maybe, No, Unknown) with the same color scheme as icons now
+- For editing presence note, icons are enough, remove text "edit note" and "delete note"
+- RSVP section must be available also for event popup open from calendar events. User must be able to mark presence and add note also there in the same style as on event list.
+- While opening event popup in calendar, ensure that the whole popup stays visible on screen. Currently on mobile app, it partially opens out of screen, depending on the date selected.
+- While clicking on a day in calendar, new event should be opened, with that date pre-selected.
+- In event detail, separate user's presence into a section RSVP - covering presence selection and note. The same style as on event card.
+- Move section "Presence" displaying total presence summary for all members (as is implemented now) below compositions section. Order of sections will be now [Event details, RSVP, Compositions, Presence]
+- Compositions attached to the event must be able to be deleted by Admin or Director roles. Other members cannot delete them.
+- On event card, display the number of compositions assigned to the event - e.g. "(2 musical notes icon) 3 compositions scheduled"
+- On event card, indicate for each composition the number of attachments, in the same style as on composition card. Indication should be on the same row aligned to the right.
+- Event should have time From - To.

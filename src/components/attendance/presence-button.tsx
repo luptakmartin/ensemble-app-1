@@ -35,12 +35,13 @@ export function PresenceButton({
           disabled={disabled}
           aria-label={t(s)}
           className={cn(
-            "h-8 w-8 p-0",
+            "h-8 px-3",
             status === s && activeClass
           )}
           onClick={() => onStatusChange(s)}
         >
-          <Icon className="h-4 w-4" />
+          <Icon className="h-4 w-4 mr-1" />
+          {t(s)}
         </Button>
       ))}
     </div>

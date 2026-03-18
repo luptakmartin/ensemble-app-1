@@ -123,7 +123,7 @@ describe("PUT /api/events/[id]/attendance", () => {
       makeParams("event-1")
     );
     expect(response.status).toBe(200);
-    expect(mockUpsert).toHaveBeenCalledWith("event-1", "member-2", "yes");
+    expect(mockUpsert).toHaveBeenCalledWith("event-1", "member-2", "yes", undefined);
   });
 
   it("returns 403 when member updates own status after event started", async () => {
@@ -199,6 +199,91 @@ describe("PUT /api/events/[id]/attendance", () => {
       makeRequest("http://localhost/api/events/event-1/attendance", {
         method: "PUT",
         body: JSON.stringify({ status: "invalid" }),
+        headers: { "Content-Type": "application/json" },
+      }),
+      makeParams("event-1")
+    );
+    expect(response.status).toBe(400);
+  });
+
+  it("PUT with note-only updates note", async () => {
+    mockGetSessionContext.mockResolvedValue(memberSession as never);
+    mockFindById.mockResolvedValue(mockEvent);
+    mockHasEventStarted.mockReturnValue(false);
+    mockUpsert.mockResolvedValue({ memberId: "member-2", note: "Late arrival" });
+
+    const response = await PUT(
+      makeRequest("http://localhost/api/events/event-1/attendance", {
+        method: "PUT",
+        body: JSON.stringify({ note: "Late arrival" }),
+        headers: { "Content-Type": "application/json" },
+      }),
+      makeParams("event-1")
+    );
+    expect(response.status).toBe(200);
+    expect(mockUpsert).toHaveBeenCalledWith("event-1", "member-2", undefined, "Late arrival");
+  });
+
+  it("PUT with status and note updates both", async () => {
+    mockGetSessionContext.mockResolvedValue(memberSession as never);
+    mockFindById.mockResolvedValue(mockEvent);
+    mockHasEventStarted.mockReturnValue(false);
+    mockUpsert.mockResolvedValue({ memberId: "member-2", status: "yes", note: "Late" });
+
+    const response = await PUT(
+      makeRequest("http://localhost/api/events/event-1/attendance", {
+        method: "PUT",
+        body: JSON.stringify({ status: "yes", note: "Late" }),
+        headers: { "Content-Type": "application/json" },
+      }),
+      makeParams("event-1")
+    );
+    expect(response.status).toBe(200);
+    expect(mockUpsert).toHaveBeenCalledWith("event-1", "member-2", "yes", "Late");
+  });
+
+  it("PUT ignores note when editing another member", async () => {
+    mockGetSessionContext.mockResolvedValue(adminSession as never);
+    mockFindById.mockResolvedValue(mockEvent);
+    mockHasEventStarted.mockReturnValue(false);
+    mockUpsert.mockResolvedValue({ memberId: "a0000000-0000-4000-a000-000000000099", status: "no" });
+
+    const response = await PUT(
+      makeRequest("http://localhost/api/events/event-1/attendance", {
+        method: "PUT",
+        body: JSON.stringify({ status: "no", memberId: "a0000000-0000-4000-a000-000000000099", note: "should be ignored" }),
+        headers: { "Content-Type": "application/json" },
+      }),
+      makeParams("event-1")
+    );
+    expect(response.status).toBe(200);
+    expect(mockUpsert).toHaveBeenCalledWith("event-1", "a0000000-0000-4000-a000-000000000099", "no", undefined);
+  });
+
+  it("PUT with null note deletes note", async () => {
+    mockGetSessionContext.mockResolvedValue(memberSession as never);
+    mockFindById.mockResolvedValue(mockEvent);
+    mockHasEventStarted.mockReturnValue(false);
+    mockUpsert.mockResolvedValue({ memberId: "member-2", note: null });
+
+    const response = await PUT(
+      makeRequest("http://localhost/api/events/event-1/attendance", {
+        method: "PUT",
+        body: JSON.stringify({ note: null }),
+        headers: { "Content-Type": "application/json" },
+      }),
+      makeParams("event-1")
+    );
+    expect(response.status).toBe(200);
+  });
+
+  it("PUT with empty body returns 400", async () => {
+    mockGetSessionContext.mockResolvedValue(memberSession as never);
+
+    const response = await PUT(
+      makeRequest("http://localhost/api/events/event-1/attendance", {
+        method: "PUT",
+        body: JSON.stringify({}),
         headers: { "Content-Type": "application/json" },
       }),
       makeParams("event-1")

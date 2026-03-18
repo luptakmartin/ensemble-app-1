@@ -238,6 +238,25 @@ test.describe("Composition attachments (admin)", () => {
     await expect(page.getByText("derived-name-test.pdf")).toBeVisible();
   });
 
+  test("deletes an attachment", async ({ page }) => {
+    // Look for a delete button on an attachment
+    const deleteButton = page.getByRole("button", { name: "Smazat přílohu" }).first();
+    if (!(await deleteButton.isVisible().catch(() => false))) {
+      test.skip(true, "No attachments with delete button in test environment");
+    }
+
+    // Get the attachment name before deleting
+    const attachmentRow = deleteButton.locator("..");
+    const nameText = await attachmentRow.locator("a, span").first().textContent();
+
+    await deleteButton.click();
+
+    // Attachment should disappear
+    if (nameText) {
+      await expect(page.getByText(nameText)).not.toBeVisible({ timeout: 10_000 });
+    }
+  });
+
   test("uses FileText icon for sheets (not FileMusic)", async ({ page }) => {
     // Check for the correct SVG icon presence — FileText has specific path attributes
     // This is a smoke test to ensure the component renders without FileMusic errors

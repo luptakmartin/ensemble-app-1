@@ -104,4 +104,90 @@ describe("POST /api/compositions/[id]/attachments (link mode)", () => {
     expect(response.status).toBe(201);
     expect(await response.json()).toEqual(attachment);
   });
+
+  it("POST creates link without name — derives from URL", async () => {
+    mockGetSessionContext.mockResolvedValue(adminSession as never);
+    mockFindById.mockResolvedValue({ id: "comp-1" });
+    const attachment = { id: "a2", name: "score.pdf", isLink: true };
+    mockCreateAttachment.mockResolvedValue(attachment);
+
+    const response = await POST(
+      makeRequest("http://localhost/api/compositions/comp-1/attachments", {
+        method: "POST",
+        body: JSON.stringify({
+          url: "https://example.com/score.pdf",
+          type: "sheet",
+          isLink: true,
+        }),
+        headers: { "Content-Type": "application/json" },
+      }),
+      params
+    );
+    expect(response.status).toBe(201);
+    expect(mockCreateAttachment).toHaveBeenCalledWith(
+      expect.objectContaining({ name: "score.pdf" })
+    );
+  });
+
+  it("POST creates link with explicit name — uses provided name", async () => {
+    mockGetSessionContext.mockResolvedValue(adminSession as never);
+    mockFindById.mockResolvedValue({ id: "comp-1" });
+    const attachment = { id: "a3", name: "My Score", isLink: true };
+    mockCreateAttachment.mockResolvedValue(attachment);
+
+    const response = await POST(
+      makeRequest("http://localhost/api/compositions/comp-1/attachments", {
+        method: "POST",
+        body: JSON.stringify({
+          name: "My Score",
+          url: "https://example.com/score.pdf",
+          type: "sheet",
+          isLink: true,
+        }),
+        headers: { "Content-Type": "application/json" },
+      }),
+      params
+    );
+    expect(response.status).toBe(201);
+    expect(mockCreateAttachment).toHaveBeenCalledWith(
+      expect.objectContaining({ name: "My Score" })
+    );
+  });
+
+  it("POST returns 400 when isLink false and no file in body", async () => {
+    mockGetSessionContext.mockResolvedValue(adminSession as never);
+    mockFindById.mockResolvedValue({ id: "comp-1" });
+
+    const response = await POST(
+      makeRequest("http://localhost/api/compositions/comp-1/attachments", {
+        method: "POST",
+        body: JSON.stringify({
+          type: "sheet",
+          isLink: false,
+        }),
+        headers: { "Content-Type": "application/json" },
+      }),
+      params
+    );
+    expect(response.status).toBe(400);
+  });
+
+  it("POST returns 400 for invalid type", async () => {
+    mockGetSessionContext.mockResolvedValue(adminSession as never);
+    mockFindById.mockResolvedValue({ id: "comp-1" });
+
+    const response = await POST(
+      makeRequest("http://localhost/api/compositions/comp-1/attachments", {
+        method: "POST",
+        body: JSON.stringify({
+          url: "http://x.com",
+          type: "invalid",
+          isLink: true,
+        }),
+        headers: { "Content-Type": "application/json" },
+      }),
+      params
+    );
+    expect(response.status).toBe(400);
+  });
 });

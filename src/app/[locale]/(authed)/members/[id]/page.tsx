@@ -6,6 +6,7 @@ import { hasRole } from "@/lib/auth/roles";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { RoleManager } from "@/components/members/role-manager";
+import { VoiceGroupEditor } from "@/components/members/voice-group-editor";
 import { Link } from "@/lib/i18n/routing";
 import { ArrowLeft } from "lucide-react";
 
@@ -24,6 +25,7 @@ export default async function MemberDetailPage({ params }: PageParams) {
   }
 
   const isAdmin = hasRole(session.member.roles, ["admin"]);
+  const isDirectorOrAdmin = hasRole(session.member.roles, ["admin", "director"]);
   const isSelf = session.member.id === member.id;
 
   return (
@@ -57,6 +59,16 @@ export default async function MemberDetailPage({ params }: PageParams) {
             </Badge>
           ))}
         </div>
+
+        {isDirectorOrAdmin && (
+          <>
+            <Separator />
+            <VoiceGroupEditor
+              memberId={member.id}
+              currentVoiceGroup={member.voiceGroup}
+            />
+          </>
+        )}
 
         {isAdmin && (
           <>

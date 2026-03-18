@@ -32,6 +32,7 @@ const formSchema = z.object({
   type: z.enum(eventTypes),
   date: z.string().min(1),
   time: z.string().regex(/^\d{2}:\d{2}$/),
+  timeTo: z.string().regex(/^\d{2}:\d{2}$/).optional().or(z.literal("")),
   place: z.string().min(1),
   description: z.string().optional(),
 });
@@ -46,9 +47,11 @@ function formatDateForInput(date: Date | string): string {
 export function EventForm({
   event,
   mode,
+  defaultDate,
 }: {
   event?: Event;
   mode: "create" | "edit";
+  defaultDate?: string;
 }) {
   const t = useTranslations();
   const router = useRouter();
@@ -67,11 +70,14 @@ export function EventForm({
           type: event.type,
           date: formatDateForInput(event.date),
           time: event.time,
+          timeTo: event.timeTo ?? "",
           place: event.place,
           description: event.description ?? "",
         }
       : {
           type: "regular_rehearsal",
+          date: defaultDate ?? "",
+          timeTo: "",
         },
   });
 
@@ -86,6 +92,7 @@ export function EventForm({
       type: data.type,
       date: dateTime,
       time: data.time,
+      timeTo: data.timeTo || undefined,
       place: data.place,
       description: data.description || undefined,
     };
@@ -148,7 +155,7 @@ export function EventForm({
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-3 gap-4">
         <div className="space-y-2">
           <Label htmlFor="date">{t("events.date")}</Label>
           <Input id="date" type="date" {...register("date")} />
@@ -158,10 +165,18 @@ export function EventForm({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="time">{t("events.time")}</Label>
+          <Label htmlFor="time">{t("events.timeFrom")}</Label>
           <Input id="time" type="time" {...register("time")} />
           {errors.time && (
             <p className="text-sm text-destructive">{errors.time.message}</p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="timeTo">{t("events.timeTo")}</Label>
+          <Input id="timeTo" type="time" {...register("timeTo")} />
+          {errors.timeTo && (
+            <p className="text-sm text-destructive">{errors.timeTo.message}</p>
           )}
         </div>
       </div>

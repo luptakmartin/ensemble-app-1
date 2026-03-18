@@ -121,4 +121,42 @@ describe("AttendanceRepository", () => {
     expect(result).toBeNull();
     expect(mockFns.where).toHaveBeenCalled();
   });
+
+  it("updateNote delegates to upsert", async () => {
+    insertResult = [{
+      id: "att-1",
+      eventId: "event-1",
+      memberId: "member-1",
+      status: null,
+      note: "sick today",
+      updatedAt: new Date(),
+    }];
+
+    const upsertSpy = vi.spyOn(repo, "upsert");
+
+    await repo.updateNote("event-1", "member-1", "sick today");
+
+    expect(upsertSpy).toHaveBeenCalledWith("event-1", "member-1", undefined, "sick today");
+  });
+
+  it("findByMemberForEvents returns attendance for multiple events", async () => {
+    selectWhereResult = [
+      { id: "att-1", eventId: "event-1", memberId: "member-1", status: "yes", updatedAt: new Date() },
+      { id: "att-2", eventId: "event-2", memberId: "member-1", status: "no", updatedAt: new Date() },
+    ];
+
+    const result = await repo.findByMemberForEvents("member-1", ["event-1", "event-2"]);
+
+    expect(result).toHaveLength(2);
+    expect(mockFns.select).toHaveBeenCalled();
+    expect(mockFns.from).toHaveBeenCalled();
+    expect(mockFns.where).toHaveBeenCalled();
+  });
+
+  it("findByMemberForEvents returns empty array for empty eventIds", async () => {
+    const result = await repo.findByMemberForEvents("member-1", []);
+
+    expect(result).toEqual([]);
+    expect(mockFns.select).not.toHaveBeenCalled();
+  });
 });

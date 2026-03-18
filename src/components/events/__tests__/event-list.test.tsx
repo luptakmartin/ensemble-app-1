@@ -34,6 +34,7 @@ const mockEvent: Event = {
   type: "concert",
   date: new Date("2026-06-01T18:00:00Z"),
   time: "18:00",
+  timeTo: null,
   place: "Concert Hall",
   description: null,
   createdAt: new Date(),

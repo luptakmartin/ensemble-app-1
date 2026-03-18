@@ -91,23 +91,18 @@ export function CompositionCard({
         </CardHeader>
         <CardContent>
           <Link href={`/compositions/${composition.id}`}>
-            <div className="space-y-1 text-sm text-muted-foreground">
+            <div className="space-y-1 text-sm text-muted-foreground" suppressHydrationWarning>
               <div className="flex items-center gap-2">
                 <User className="h-4 w-4" />
                 <span>{composition.author}</span>
               </div>
-              {composition.duration && (
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4" />
-                  <span>{composition.duration}</span>
-                </div>
-              )}
-              <div
-                className={composition.attachmentCount > 0 ? "flex items-center gap-2" : "hidden"}
-                suppressHydrationWarning
-              >
+              <div className={composition.duration ? "flex items-center gap-2" : "hidden"}>
+                <Clock className="h-4 w-4" />
+                <span>{composition.duration ?? ""}</span>
+              </div>
+              <div className={composition.attachmentCount > 0 ? "flex items-center gap-2" : "hidden"}>
                 <Paperclip className="h-4 w-4" />
-                <span suppressHydrationWarning>
+                <span>
                   {composition.attachmentCount} {t("compositions.attachments").toLowerCase()}
                 </span>
               </div>
