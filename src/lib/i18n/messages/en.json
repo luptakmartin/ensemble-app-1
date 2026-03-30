@@ -31,6 +31,7 @@
     "title": "Events",
     "upcoming": "Upcoming",
     "past": "Past",
+    "filterPlaceholder": "Search by name or description...",
     "cardView": "Cards",
     "calendarView": "Calendar",
     "name": "Name",

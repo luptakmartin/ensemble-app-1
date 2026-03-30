@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { Plus, Grid3x3, Calendar } from "lucide-react";
+import { Plus, Grid3x3, Calendar, Search } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { EventCard } from "./event-card";
 import { EventCalendar } from "./event-calendar";
 import type { Event } from "@/lib/db/repositories";
@@ -34,7 +35,17 @@ export function EventList({
   compositionCountMap?: Record<string, number>;
 }) {
   const t = useTranslations("events");
+  const tCommon = useTranslations("common");
   const [view, setView] = useState<ViewMode>("cards");
+  const [filter, setFilter] = useState("");
+
+  const filterEvents = (events: Event[]) =>
+    filter
+      ? events.filter((e) => {
+          const q = filter.toLowerCase();
+          return e.name.toLowerCase().includes(q) || (e.description?.toLowerCase().includes(q) ?? false);
+        })
+      : events;
 
   const renderCard = (event: Event) => {
     const attendance = userAttendanceMap?.[event.id];
@@ -52,7 +63,16 @@ export function EventList({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center gap-4">
+        <div className="relative flex-1 min-w-[200px]">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder={t("filterPlaceholder")}
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            className="pl-9"
+          />
+        </div>
         <div className="flex gap-1 rounded-md border p-1">
           <Button
             variant={view === "cards" ? "secondary" : "ghost"}
@@ -94,25 +114,25 @@ export function EventList({
           </TabsList>
 
           <TabsContent value="upcoming">
-            {upcomingEvents.length === 0 ? (
+            {filterEvents(upcomingEvents).length === 0 ? (
               <p className="text-muted-foreground py-8 text-center">
-                {t("noUpcoming")}
+                {filter ? tCommon("noResults") : t("noUpcoming")}
               </p>
             ) : (
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {upcomingEvents.map(renderCard)}
+                {filterEvents(upcomingEvents).map(renderCard)}
               </div>
             )}
           </TabsContent>
 
           <TabsContent value="past">
-            {pastEvents.length === 0 ? (
+            {filterEvents(pastEvents).length === 0 ? (
               <p className="text-muted-foreground py-8 text-center">
-                {t("noPast")}
+                {filter ? tCommon("noResults") : t("noPast")}
               </p>
             ) : (
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {pastEvents.map(renderCard)}
+                {filterEvents(pastEvents).map(renderCard)}
               </div>
             )}
           </TabsContent>
