@@ -8,6 +8,7 @@ export const eventTypeEnum = pgEnum("event_type", [
   "general_rehearsal",
   "concert",
   "meeting",
+  "other",
 ]);
 
 export const presenceStatusEnum = pgEnum("presence_status", [

@@ -16,6 +16,7 @@ export const eventSchema = z.object({
     "general_rehearsal",
     "concert",
     "meeting",
+    "other",
   ]),
   date: z.string().datetime(),
   time: z.string().regex(/^\d{2}:\d{2}$/),
@@ -70,6 +71,7 @@ export const memberProfileSchema = z.object({
   email: z.string().email(),
   phone: z.string().optional(),
   voiceGroup: z.enum(["S", "A", "T", "B"]).nullable().optional(),
+  preferredLocale: z.enum(["cs", "sk", "en"]).optional(),
 });
 export type MemberProfileInput = z.infer<typeof memberProfileSchema>;
 

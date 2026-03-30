@@ -56,7 +56,8 @@
       "exceptional_rehearsal": "Mimoriadna skúška",
       "general_rehearsal": "Generálna skúška",
       "concert": "Koncert",
-      "meeting": "Stretnutie"
+      "meeting": "Stretnutie",
+      "other": "Iné"
     }
   },
   "presence": {
@@ -78,6 +79,7 @@
   },
   "compositions": {
     "title": "Skladby",
+    "filterPlaceholder": "Hľadať podľa názvu alebo autora...",
     "name": "Názov",
     "author": "Autor",
     "duration": "Trvanie",
@@ -156,6 +158,8 @@
     "title": "Štatistiky",
     "dateFrom": "Od",
     "dateTo": "Do",
+    "eventType": "Typ udalosti",
+    "allTypes": "Všetky typy",
     "noData": "Žiadne dáta pre zvolené obdobie.",
     "notePopupTitle": "Poznámka k dochádzke",
     "export": "Export"
@@ -166,6 +170,7 @@
     "email": "E-mail",
     "phone": "Telefón",
     "picture": "Profilový obrázok",
+    "language": "Jazyk",
     "changePassword": "Zmeniť heslo",
     "changePicture": "Zmeniť obrázok",
     "currentPassword": "Súčasné heslo",

@@ -17,7 +17,7 @@ export type CreateMemberData = {
 };
 
 export type UpdateMemberData = Partial<
-  Pick<typeof members.$inferSelect, "name" | "email" | "phone" | "profilePicture" | "voiceGroup">
+  Pick<typeof members.$inferSelect, "name" | "email" | "phone" | "profilePicture" | "voiceGroup" | "preferredLocale">
 >;
 
 export class MemberRepository extends BaseRepository {

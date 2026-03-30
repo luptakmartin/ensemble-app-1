@@ -56,7 +56,8 @@
       "exceptional_rehearsal": "Exceptional Rehearsal",
       "general_rehearsal": "General Rehearsal",
       "concert": "Concert",
-      "meeting": "Meeting"
+      "meeting": "Meeting",
+      "other": "Other"
     }
   },
   "presence": {
@@ -78,6 +79,7 @@
   },
   "compositions": {
     "title": "Compositions",
+    "filterPlaceholder": "Search by name or author...",
     "name": "Name",
     "author": "Author",
     "duration": "Duration",
@@ -156,6 +158,8 @@
     "title": "Statistics",
     "dateFrom": "From",
     "dateTo": "To",
+    "eventType": "Event Type",
+    "allTypes": "All types",
     "noData": "No data for the selected period.",
     "notePopupTitle": "Attendance Note",
     "export": "Export"
@@ -166,6 +170,7 @@
     "email": "Email",
     "phone": "Phone",
     "picture": "Profile picture",
+    "language": "Language",
     "changePassword": "Change password",
     "changePicture": "Change picture",
     "currentPassword": "Current password",

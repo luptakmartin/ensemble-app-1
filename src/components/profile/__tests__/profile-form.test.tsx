@@ -10,6 +10,7 @@ vi.mock("next-intl", () => ({
       "profile.email": "Email",
       "profile.phone": "Phone",
       "profile.picture": "Profile picture",
+      "profile.language": "Language",
       "profile.save": "Save",
       "profile.profileUpdated": "Profile updated successfully",
       "members.voiceGroup": "Voice Group",
@@ -22,6 +23,7 @@ vi.mock("next-intl", () => ({
     };
     return labels[key] ?? key;
   },
+  useLocale: () => "cs",
 }));
 
 vi.mock("@/lib/i18n/routing", () => ({
@@ -38,6 +40,7 @@ const mockMember: Member = {
   phone: "123456",
   profilePicture: null,
   voiceGroup: "S",
+  preferredLocale: "cs",
   createdAt: new Date(),
   updatedAt: new Date(),
   roles: ["member"],

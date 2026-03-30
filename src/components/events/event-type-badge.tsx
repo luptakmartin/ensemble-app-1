@@ -10,6 +10,7 @@ export const typeColorMap: Record<Event["type"], string> = {
   general_rehearsal: "bg-purple-100 text-purple-800 hover:bg-purple-100",
   concert: "bg-green-100 text-green-800 hover:bg-green-100",
   meeting: "bg-gray-100 text-gray-800 hover:bg-gray-100",
+  other: "bg-yellow-100 text-yellow-800 hover:bg-yellow-100",
 };
 
 export const calendarColorMap: Record<Event["type"], string> = {
@@ -18,6 +19,7 @@ export const calendarColorMap: Record<Event["type"], string> = {
   general_rehearsal: "#a855f7",
   concert: "#22c55e",
   meeting: "#6b7280",
+  other: "#eab308",
 };
 
 export function EventTypeBadge({ type }: { type: Event["type"] }) {

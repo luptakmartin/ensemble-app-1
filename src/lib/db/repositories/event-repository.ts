@@ -94,10 +94,11 @@ export class EventRepository extends BaseRepository {
     return updated;
   }
 
-  async findByDateRange(from?: Date, to?: Date): Promise<Event[]> {
+  async findByDateRange(from?: Date, to?: Date, type?: string): Promise<Event[]> {
     const conditions = [eq(events.ensembleId, this.ensembleId)];
     if (from) conditions.push(gte(events.date, from));
     if (to) conditions.push(lt(events.date, to));
+    if (type) conditions.push(eq(events.type, type as Event["type"]));
 
     return this.db
       .select()

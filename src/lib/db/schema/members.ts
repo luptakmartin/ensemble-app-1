@@ -15,6 +15,7 @@ export const members = pgTable("members", {
   phone: varchar("phone", { length: 50 }),
   profilePicture: varchar("profile_picture", { length: 500 }),
   voiceGroup: voiceGroupEnum("voice_group"),
+  preferredLocale: varchar("preferred_locale", { length: 5 }).default("cs"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 }, (table) => [

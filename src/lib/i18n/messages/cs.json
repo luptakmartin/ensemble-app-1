@@ -56,7 +56,8 @@
       "exceptional_rehearsal": "Mimořádná zkouška",
       "general_rehearsal": "Generální zkouška",
       "concert": "Koncert",
-      "meeting": "Schůzka"
+      "meeting": "Schůzka",
+      "other": "Jiné"
     }
   },
   "presence": {
@@ -78,6 +79,7 @@
   },
   "compositions": {
     "title": "Skladby",
+    "filterPlaceholder": "Hledat podle názvu nebo autora...",
     "name": "Název",
     "author": "Autor",
     "duration": "Délka",
@@ -156,6 +158,8 @@
     "title": "Statistiky",
     "dateFrom": "Od",
     "dateTo": "Do",
+    "eventType": "Typ události",
+    "allTypes": "Všechny typy",
     "noData": "Žádná data pro zvolené období.",
     "notePopupTitle": "Poznámka k docházce",
     "export": "Export"
@@ -166,6 +170,7 @@
     "email": "E-mail",
     "phone": "Telefon",
     "picture": "Profilový obrázek",
+    "language": "Jazyk",
     "changePassword": "Změnit heslo",
     "changePicture": "Změnit obrázek",
     "currentPassword": "Současné heslo",

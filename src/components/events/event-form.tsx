@@ -25,6 +25,7 @@ const eventTypes = [
   "general_rehearsal",
   "concert",
   "meeting",
+  "other",
 ] as const;
 
 const formSchema = z.object({

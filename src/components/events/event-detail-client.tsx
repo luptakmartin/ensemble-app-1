@@ -107,7 +107,7 @@ export function EventDetailClient({
         <div className="flex items-center justify-between">
           <h3 className="font-medium flex items-center gap-2">
             <Music className="h-4 w-4" />
-            Compositions
+            {t("compositions.title")}
           </h3>
           {canEdit && (
             <EventCompositionPicker

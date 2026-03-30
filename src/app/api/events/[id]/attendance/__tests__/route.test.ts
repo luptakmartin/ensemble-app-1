@@ -175,6 +175,23 @@ describe("PUT /api/events/[id]/attendance", () => {
     expect(response.status).toBe(200);
   });
 
+  it("returns 200 when director updates another member's status", async () => {
+    mockGetSessionContext.mockResolvedValue(directorSession as never);
+    mockFindById.mockResolvedValue(mockEvent);
+    mockHasEventStarted.mockReturnValue(false);
+    mockUpsert.mockResolvedValue({ memberId: "a0000000-0000-4000-a000-000000000099", status: "no" });
+
+    const response = await PUT(
+      makeRequest("http://localhost/api/events/event-1/attendance", {
+        method: "PUT",
+        body: JSON.stringify({ status: "no", memberId: "a0000000-0000-4000-a000-000000000099" }),
+        headers: { "Content-Type": "application/json" },
+      }),
+      makeParams("event-1")
+    );
+    expect(response.status).toBe(200);
+  });
+
   it("returns 200 when director updates own status after event started", async () => {
     mockGetSessionContext.mockResolvedValue(directorSession as never);
     mockFindById.mockResolvedValue(mockEvent);

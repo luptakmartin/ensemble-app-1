@@ -46,7 +46,7 @@ export function AttendancePanel({
           <AttendanceDetail
             attendance={attendance}
             currentMemberId={currentMemberId}
-            canEditOthers={isAdmin}
+            canEditOthers={isDirectorOrAdmin}
             eventStarted={eventStarted}
             isDirectorOrAdmin={isDirectorOrAdmin}
             onStatusChange={onStatusChange}

@@ -45,7 +45,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     // Determine target member
     let targetMemberId: string;
     if (data.memberId) {
-      if (!isAdmin) {
+      if (!isDirectorOrAdmin) {
         return NextResponse.json({ error: "Forbidden" }, { status: 403 });
       }
       targetMemberId = data.memberId;
@@ -56,7 +56,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     const isSelf = targetMemberId === session.member.id;
 
     // Check if editing others without admin
-    if (!isSelf && !isAdmin) {
+    if (!isSelf && !isDirectorOrAdmin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

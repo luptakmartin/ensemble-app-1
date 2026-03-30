@@ -7,6 +7,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -15,6 +22,15 @@ import {
 import { StatisticsTable } from "./statistics-table";
 import { exportToXlsx, exportToCsv, exportToPdf } from "./statistics-export";
 import type { Event, Member, AttendanceWithMember } from "@/lib/db/repositories";
+
+const eventTypes = [
+  "regular_rehearsal",
+  "exceptional_rehearsal",
+  "general_rehearsal",
+  "concert",
+  "meeting",
+  "other",
+] as const;
 
 interface StatisticsData {
   events: Event[];
@@ -36,10 +52,12 @@ export function StatisticsClient({
   isDirectorOrAdmin: boolean;
 }) {
   const t = useTranslations("statistics");
+  const tEvents = useTranslations("events");
   const tMembers = useTranslations("members");
   const tPresence = useTranslations("presence");
   const [from, setFrom] = useState(defaultFrom);
   const [to, setTo] = useState("");
+  const [eventType, setEventType] = useState("");
   const [data, setData] = useState<StatisticsData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -49,6 +67,7 @@ export function StatisticsClient({
       const params = new URLSearchParams();
       if (from) params.set("from", from);
       if (to) params.set("to", to);
+      if (eventType) params.set("type", eventType);
 
       const response = await fetch(`/api/statistics?${params}`);
       if (response.ok) {
@@ -60,7 +79,7 @@ export function StatisticsClient({
     } finally {
       setLoading(false);
     }
-  }, [from, to]);
+  }, [from, to, eventType]);
 
   useEffect(() => {
     fetchData();
@@ -142,6 +161,22 @@ export function StatisticsClient({
             onChange={(e) => setTo(e.target.value)}
             className="w-40"
           />
+        </div>
+        <div className="space-y-1">
+          <Label htmlFor="stats-type">{t("eventType")}</Label>
+          <Select value={eventType || "all"} onValueChange={(v) => setEventType(v === "all" ? "" : v)}>
+            <SelectTrigger id="stats-type" className="w-48">
+              <SelectValue placeholder={t("allTypes")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">{t("allTypes")}</SelectItem>
+              {eventTypes.map((type) => (
+                <SelectItem key={type} value={type}>
+                  {tEvents(`types.${type}`)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         {data && data.events.length > 0 && (
           <DropdownMenu>

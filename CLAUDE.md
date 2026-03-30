@@ -24,3 +24,4 @@ Read these documents before starting any feature work.
 
 # Testing
 - Always write unit tests (Vitest) alongside implementation. Run them to validate before presenting the result.
+- Always write playwright tests alongside implementation. Run them to validate before presenting the result.

@@ -23,13 +23,11 @@ export const navItems: NavItem[] = [
     href: "/members",
     labelKey: "members.title",
     iconName: "users",
-    requiredRoles: ["admin", "director"],
   },
   {
     href: "/statistics",
     labelKey: "statistics.title",
     iconName: "bar-chart-3",
-    requiredRoles: ["admin", "director"],
     desktopOnly: true,
   },
   {

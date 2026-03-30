@@ -7,12 +7,25 @@ import { useRouter } from "@/lib/i18n/routing";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { VoiceGroupSelect } from "@/components/members/voice-group-select";
 import { AvatarDisplay } from "@/components/ui/avatar-display";
 import { memberProfileSchema, type MemberProfileInput } from "@/lib/validation/schemas";
 import type { Member } from "@/lib/db/repositories";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
+
+const localeOptions = [
+  { value: "cs", label: "Čeština" },
+  { value: "sk", label: "Slovenčina" },
+  { value: "en", label: "English" },
+] as const;
 
 export function AdminMemberEditor({ member }: { member: Member }) {
   const t = useTranslations();
@@ -31,10 +44,12 @@ export function AdminMemberEditor({ member }: { member: Member }) {
       email: member.email,
       phone: member.phone ?? "",
       voiceGroup: member.voiceGroup,
+      preferredLocale: (member.preferredLocale as MemberProfileInput["preferredLocale"]) ?? "cs",
     },
   });
 
   const voiceGroup = watch("voiceGroup");
+  const preferredLocale = watch("preferredLocale");
 
   const onSubmit = async (data: MemberProfileInput) => {
     try {
@@ -159,6 +174,25 @@ export function AdminMemberEditor({ member }: { member: Member }) {
             value={voiceGroup}
             onChange={(v) => setValue("voiceGroup", v as MemberProfileInput["voiceGroup"])}
           />
+        </div>
+
+        <div className="space-y-2">
+          <Label>{t("profile.language")}</Label>
+          <Select
+            value={preferredLocale ?? "cs"}
+            onValueChange={(v) => setValue("preferredLocale", v as MemberProfileInput["preferredLocale"])}
+          >
+            <SelectTrigger className="w-48">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {localeOptions.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <Button type="submit" disabled={isSubmitting}>
