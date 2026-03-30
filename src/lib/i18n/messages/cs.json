@@ -120,6 +120,7 @@
     "confirmDelete": "Opravdu chcete smazat tohoto člena? Tuto akci nelze vrátit zpět.",
     "editMember": "Upravit člena",
     "backToMembers": "Zpět na členy",
+    "filterPlaceholder": "Hledat podle jména...",
     "noMembers": "Žádní členové.",
     "manageRoles": "Spravovat role",
     "cannotRemoveOwnAdmin": "Nemůžete si odebrat vlastní roli administrátora.",
@@ -160,6 +161,8 @@
     "dateTo": "Do",
     "eventType": "Typ události",
     "allTypes": "Všechny typy",
+    "memberFilter": "Člen",
+    "memberFilterPlaceholder": "Hledat člena...",
     "noData": "Žádná data pro zvolené období.",
     "notePopupTitle": "Poznámka k docházce",
     "export": "Export"

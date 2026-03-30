@@ -120,6 +120,7 @@
     "confirmDelete": "Are you sure you want to delete this member? This action cannot be undone.",
     "editMember": "Edit Member",
     "backToMembers": "Back to members",
+    "filterPlaceholder": "Search by name...",
     "noMembers": "No members.",
     "manageRoles": "Manage Roles",
     "cannotRemoveOwnAdmin": "You cannot remove your own admin role.",
@@ -160,6 +161,8 @@
     "dateTo": "To",
     "eventType": "Event Type",
     "allTypes": "All types",
+    "memberFilter": "Member",
+    "memberFilterPlaceholder": "Search member...",
     "noData": "No data for the selected period.",
     "notePopupTitle": "Attendance Note",
     "export": "Export"

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useTranslations } from "next-intl";
-import { Download } from "lucide-react";
+import { Download, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -58,6 +58,7 @@ export function StatisticsClient({
   const [from, setFrom] = useState(defaultFrom);
   const [to, setTo] = useState("");
   const [eventType, setEventType] = useState("");
+  const [memberFilter, setMemberFilter] = useState("");
   const [data, setData] = useState<StatisticsData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -178,6 +179,19 @@ export function StatisticsClient({
             </SelectContent>
           </Select>
         </div>
+        <div className="space-y-1">
+          <Label htmlFor="stats-member">{t("memberFilter")}</Label>
+          <div className="relative">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              id="stats-member"
+              placeholder={t("memberFilterPlaceholder")}
+              value={memberFilter}
+              onChange={(e) => setMemberFilter(e.target.value)}
+              className="pl-9 w-48"
+            />
+          </div>
+        </div>
         {data && data.events.length > 0 && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -206,7 +220,10 @@ export function StatisticsClient({
       ) : data && data.events.length > 0 ? (
         <StatisticsTable
           events={data.events}
-          members={data.members}
+          members={memberFilter
+            ? data.members.filter((m) => m.name.toLowerCase().includes(memberFilter.toLowerCase()))
+            : data.members
+          }
           attendance={data.attendance}
           currentMemberId={currentMemberId}
           isDirectorOrAdmin={isDirectorOrAdmin}

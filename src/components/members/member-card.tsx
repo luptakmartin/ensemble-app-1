@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { Phone } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { AvatarDisplay } from "@/components/ui/avatar-display";
@@ -28,6 +29,12 @@ export function MemberCard({ member }: { member: Member }) {
         <Link href={`/members/${member.id}`}>
           <div className="space-y-2">
             <p className="text-sm text-muted-foreground">{member.email}</p>
+            {member.phone && (
+              <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                <Phone className="h-3 w-3" />
+                <span>{member.phone}</span>
+              </div>
+            )}
             <div className="flex flex-wrap gap-1">
               {member.voiceGroup && (
                 <Badge variant="secondary">
